@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FOCUS & FLOW</title>
+
+    <!-- Google Fonts: Outfit for a modern, clean look -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icon-512.png">
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./service-worker.js')
+                    .then(registration => console.log('ServiceWorker registered'))
+                    .catch(err => console.log('ServiceWorker registration failed: ', err));
+            });
+        }
+    </script>
+</head>
+
+<body>
+    <div class="background-mesh"></div>
+
+    <div class="app-container">
+        <header>
+            <div class="header-controls">
+                <button id="import-btn" aria-label="Import Data" title="Import Data">
+                    <i class="ph ph-upload-simple"></i>
+                </button>
+                <button id="export-btn" aria-label="Export Data" title="Export Data">
+                    <i class="ph ph-download-simple"></i>
+                </button>
+                <button id="theme-toggle" aria-label="Toggle Dark Mode" title="Toggle Theme">
+                    <i class="ph ph-moon"></i>
+                </button>
+                <input type="file" id="import-input" accept=".json" style="display: none;">
+            </div>
+            <h1>FOCUS & FLOW</h1>
+            <p class="subtitle">Your personal task sanctuary</p>
+        </header>
+
+        <div class="input-group">
+            <input type="text" id="todo-input" placeholder="What keeps you busy today?" autocomplete="off">
+            <select id="todo-priority" aria-label="Priority">
+                <option value="low">Low</option>
+                <option value="medium" selected>Medium</option>
+                <option value="high">High</option>
+            </select>
+            <button id="todo-repeat" aria-label="Toggle Repeat" title="Daily Habit">
+                <i class="ph ph-arrows-clockwise"></i>
+            </button>
+            <input type="date" id="todo-date" aria-label="Due Date">
+        </div>
+
+        <div class="actions-bar">
+            <div class="search-wrapper">
+                <i class="ph ph-magnifying-glass"></i>
+                <input type="text" id="search-input" placeholder="Search tasks...">
+            </div>
+            <div class="sort-controls">
+                <span class="actions-label">Sort:</span>
+                <div class="sort-buttons">
+                    <button id="sort-date" class="sort-btn" title="Sort by Date">
+                        <i class="ph ph-calendar-blank"></i>
+                    </button>
+                    <button id="sort-priority" class="sort-btn" title="Sort by Priority">
+                        <i class="ph ph-warning-circle"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <ul id="todo-list" class="todo-list">
+            <!-- Tasks will be injected here -->
+        </ul>
+
+        <div class="status-bar">
+            <span id="items-left">0 items left</span>
+            <div class="filters">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="today">Today</button>
+                <button class="filter-btn" data-filter="active">Active</button>
+                <button class="filter-btn" data-filter="completed">Done</button>
+            </div>
+            <button id="clear-completed" class="filter-btn">Clear Completed</button>
+        </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div id="edit-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <h2>Edit Task</h2>
+            <div class="modal-form">
+                <input type="text" id="edit-text" placeholder="Task description">
+                <input type="date" id="edit-date">
+                <select id="edit-priority">
+                    <option value="low">Low</option>
+                    <option value="medium">Medium</option>
+                    <option value="high">High</option>
+                </select>
+            </div>
+            <div class="modal-actions">
+                <button id="cancel-edit" class="modal-btn secondary">Cancel</button>
+                <button id="save-edit" class="modal-btn primary">Save Changes</button>
+            </div>
+            <div class="subtasks-section">
+                <h3>Subtasks</h3>
+                <ul id="subtaskList" class="subtask-list">
+                    <!-- Subtasks will be added here dynamically -->
+                </ul>
+                <div class="add-subtask-form">
+                    <input type="text" id="newSubtaskInput" placeholder="Add a subtask...">
+                    <button type="button" id="addSubtaskBtn" class="btn-secondary">
+                        <i class="ph ph-plus"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>

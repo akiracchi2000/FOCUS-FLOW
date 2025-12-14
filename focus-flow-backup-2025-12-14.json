@@ -1,0 +1,44 @@
+[
+  {
+    "id": 1765733912880,
+    "text": "基本大全 数学BC原稿作成",
+    "dueDate": "2025-12-15",
+    "priority": "medium",
+    "completed": false
+  },
+  {
+    "id": 1765730812974,
+    "text": "翔凜高1データ送付",
+    "dueDate": "2025-12-15",
+    "priority": "high",
+    "completed": false
+  },
+  {
+    "id": 1765733001654,
+    "text": "岡本君　東大問題準備",
+    "dueDate": "2025-12-15",
+    "priority": "medium",
+    "completed": false
+  },
+  {
+    "id": 1765732415489,
+    "text": "定期テスト対策動画　微分積分法",
+    "dueDate": "2025-12-16",
+    "priority": "low",
+    "completed": false
+  },
+  {
+    "id": 1765733824593,
+    "text": "定期テスト対策動画校正",
+    "dueDate": "2025-12-19",
+    "priority": "medium",
+    "completed": false
+  },
+  {
+    "id": 1765730601581,
+    "text": "IRL IIIC予習",
+    "dueDate": "2025-12-19",
+    "completed": false,
+    "priority": "medium"
+  }
+]
