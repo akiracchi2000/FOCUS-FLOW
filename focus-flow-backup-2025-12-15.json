@@ -1,9 +1,53 @@
 [
   {
-    "id": 1765730812974,
-    "text": "翔凜高1データ送付",
+    "id": 1765733912880,
+    "text": "基本大全 数学BC原稿作成【数列】",
+    "dueDate": "2026-01-10",
+    "priority": "high",
+    "completed": false,
+    "subtasks": [
+      {
+        "id": 1765734875322,
+        "text": "シグマ関連",
+        "completed": false
+      },
+      {
+        "id": 1765734889355,
+        "text": "漸化式関連",
+        "completed": false
+      },
+      {
+        "id": 1765734898895,
+        "text": "数学的帰納法関連",
+        "completed": false
+      }
+    ],
+    "pinned": true
+  },
+  {
+    "id": 1765768229124,
+    "text": "古賀竟成館高校 2年教材再作成",
     "dueDate": "2025-12-15",
     "priority": "high",
+    "completed": true,
+    "subtasks": [],
+    "recurring": false,
+    "pinned": false
+  },
+  {
+    "id": 1765762403998,
+    "text": "翔凜中2データ作成",
+    "dueDate": "2025-12-15",
+    "priority": "medium",
+    "completed": false,
+    "subtasks": [],
+    "recurring": false
+  },
+  {
+    "id": 1765733001654,
+    "text": "岡本君　東大問題準備",
+    "dueDate": "2025-12-15",
+    "priority": "medium",
     "completed": false
   },
   {
@@ -19,26 +63,10 @@
     "id": 1765735596561,
     "text": "問題データ作成",
     "dueDate": "2025-12-15",
-    "priority": "high",
+    "priority": "medium",
     "completed": false,
     "subtasks": [],
     "recurring": true
-  },
-  {
-    "id": 1765735842307,
-    "text": "翔凜中3データ作成",
-    "dueDate": "2025-12-15",
-    "priority": "medium",
-    "completed": false,
-    "subtasks": [],
-    "recurring": false
-  },
-  {
-    "id": 1765733001654,
-    "text": "岡本君　東大問題準備",
-    "dueDate": "2025-12-15",
-    "priority": "medium",
-    "completed": false
   },
   {
     "id": 1765732415489,
@@ -62,27 +90,13 @@
     "priority": "medium"
   },
   {
-    "id": 1765733912880,
-    "text": "基本大全 数学BC原稿作成【数列】",
-    "dueDate": "2026-01-10",
+    "id": 1765766293101,
+    "text": "基本大全 数学BC原稿作成【統計的な推測】",
+    "dueDate": "2026-01-31",
     "priority": "high",
     "completed": false,
-    "subtasks": [
-      {
-        "id": 1765734875322,
-        "text": "シグマ関連",
-        "completed": false
-      },
-      {
-        "id": 1765734889355,
-        "text": "漸化式関連",
-        "completed": false
-      },
-      {
-        "id": 1765734898895,
-        "text": "数学的帰納法関連",
-        "completed": false
-      }
-    ]
+    "subtasks": [],
+    "recurring": false,
+    "pinned": false
   }
 ]

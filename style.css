@@ -285,6 +285,7 @@ h1 {
     opacity: 0;
     cursor: pointer;
     z-index: 10;
+    pointer-events: none;
     margin-bottom: 1rem;
     transition: var(--transition);
     position: relative;

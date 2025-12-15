@@ -344,6 +344,16 @@ const addBtn = document.getElementById('add-btn');
 todoDate.addEventListener('change', updateDateTriggerState);
 addBtn.addEventListener('click', addTodo);
 
+dateTrigger.addEventListener('click', () => {
+    try {
+        todoDate.showPicker();
+    } catch (error) {
+        // Fallback for browsers that don't support showPicker
+        todoDate.focus();
+        todoDate.click();
+    }
+});
+
 function updateDateTriggerState() {
     if (todoDate.value) {
         dateTrigger.classList.add('has-date');
