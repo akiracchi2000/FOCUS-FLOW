@@ -21,8 +21,18 @@
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('./service-worker.js')
-                    .then(registration => console.log('ServiceWorker registered'))
+                    .then(registration => {
+                        console.log('ServiceWorker registered');
+                        // Optional: Check for updates on load
+                        registration.update();
+                    })
                     .catch(err => console.log('ServiceWorker registration failed: ', err));
+
+                // Reload page when new service worker takes control (after skipWaiting)
+                navigator.serviceWorker.addEventListener('controllerchange', () => {
+                    console.log('New version found, reloading...');
+                    window.location.reload();
+                });
             });
         }
     </script>
@@ -34,6 +44,7 @@
     <div class="app-container">
         <header>
             <div class="header-controls">
+                <!-- ... existing controls ... -->
                 <button id="import-btn" aria-label="Import Data" title="Import Data">
                     <i class="ph ph-download-simple"></i>
                 </button>
@@ -46,7 +57,8 @@
                 <input type="file" id="import-input" accept=".json" style="display: none;">
             </div>
             <h1>FOCUS & FLOW</h1>
-            <p class="subtitle">Your personal task sanctuary</p>
+            <p class="subtitle">Your personal task sanctuary <span style="font-size: 0.8em; opacity: 0.6;">v1.2</span>
+            </p>
         </header>
 
         <div class="input-group">

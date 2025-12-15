@@ -76,6 +76,9 @@ function sortByPriority() {
     applyCurrentSort();
 }
 
+sortDateBtn.addEventListener('click', sortByDate);
+sortPriorityBtn.addEventListener('click', sortByPriority);
+
 // ... (Listeners) ...
 
 function togglePin(id) {

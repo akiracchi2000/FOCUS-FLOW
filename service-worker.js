@@ -11,6 +11,9 @@ const ASSETS_TO_CACHE = [
 
 // Install Event - Cache Assets
 self.addEventListener('install', (event) => {
+    // Force new service worker to activate immediately similar to "skip waiting"
+    self.skipWaiting();
+
     event.waitUntil(
         caches.open(CACHE_NAME)
             .then((cache) => {
@@ -44,6 +47,9 @@ self.addEventListener('activate', (event) => {
                     return caches.delete(key);
                 }
             }));
+        }).then(() => {
+            // Take control of all clients immediately
+            return self.clients.claim();
         })
     );
 });
