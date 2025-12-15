@@ -1,15 +1,12 @@
-const CACHE_NAME = 'focus-flow-v1.3.1';
+const CACHE_NAME = 'focus-flow-v1.3.4';
 const ASSETS_TO_CACHE = [
     './',
     './index.html',
     './style.css',
     './app.js',
     './manifest.json',
-    './firebase-config.js',
     'https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap',
-    'https://unpkg.com/@phosphor-icons/web',
-    'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js',
-    'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js'
+    'https://unpkg.com/@phosphor-icons/web'
 ];
 
 // Install Event - Cache Assets

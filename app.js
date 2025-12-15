@@ -15,6 +15,13 @@ const sortDateBtn = document.getElementById('sort-date');
 const sortPriorityBtn = document.getElementById('sort-priority');
 const searchInput = document.getElementById('search-input');
 
+// File API Selectors
+const fileOpenBtn = document.getElementById('file-open-btn');
+const fileSaveAsBtn = document.getElementById('file-save-as-btn');
+const fileStatus = document.getElementById('file-status');
+const currentFilenameSpan = document.getElementById('current-filename');
+const installBtn = document.getElementById('install-btn');
+
 // Modal Selectors
 const editModal = document.getElementById('edit-modal');
 const editText = document.getElementById('edit-text');
@@ -26,8 +33,8 @@ const subtaskList = document.getElementById('subtaskList');
 const newSubtaskInput = document.getElementById('newSubtaskInput');
 const addSubtaskBtn = document.getElementById('addSubtaskBtn');
 
-// Firebase Imports
-import { db, collection, addDoc, setDoc, doc, updateDoc, deleteDoc, onSnapshot } from './firebase-config.js';
+// Firebase Imports Removed for Local Storage
+// import { db, collection, addDoc, setDoc, doc, updateDoc, deleteDoc, onSnapshot } from './firebase-config.js';
 
 // State
 let todos = []; // Now managed by Firestore listener
@@ -35,70 +42,146 @@ let currentFilter = 'all';
 let currentSort = 'default'; // default, date, priority
 let searchQuery = '';
 let editingId = null;
+let fileHandle = null; // Reference to the open file
 
 // Collection Reference
-const todosCollection = collection(db, "todos");
+// Collection Reference Removed
+// const todosCollection = collection(db, "todos");
+
+// --- DEBUG LOGGING ---
+// Debug helper - now pointing to console
+const logToScreen = (msg) => {
+    console.log(msg);
+};
+
+// Global Error Handler - Removed for production
+// ...
+logToScreen("App module loaded.");
+logToScreen("Auth Domain: " + (typeof firebaseConfig !== 'undefined' ? firebaseConfig.authDomain : 'Unknown'));
 
 // --- Initialization & Migration ---
 
 document.addEventListener('DOMContentLoaded', () => {
     loadTheme();
-    // No explicit renderTodos() here, the onSnapshot listener will trigger it.
+    loadTodos();
 });
 
 // Real-time Listener (Replaces load from localStorage)
 // This runs once on load, and then every time data changes on server
-onSnapshot(todosCollection, (snapshot) => {
-    const remoteTodos = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-    }));
-
-    // Check for migration needed
-    // If Firestore is empty but we have local data, migrate it.
-    if (remoteTodos.length === 0) {
-        const localData = localStorage.getItem('myPremiumTodos');
-        if (localData) {
-            try {
-                const parsed = JSON.parse(localData);
-                if (Array.isArray(parsed) && parsed.length > 0) {
-                    console.log("Migrating local data to Firestore...");
-                    migrateDataToFirestore(parsed);
-                    return; // The listener will fire again as we add docs
-                }
-            } catch (e) {
-                console.error("Migration parse error", e);
-            }
-        }
-    }
-
-    todos = remoteTodos;
-    // Apply client-side sorting preference
-    applyCurrentSort();
-    // renderTodos is called inside applyCurrentSort
-});
-
-async function migrateDataToFirestore(localTodos) {
-    for (const todo of localTodos) {
-        // We use the existing ID as the document ID if possible, or let Firestore generate one.
-        // To keep it simple and ensure IDs are strings in Firestore usage (doc.id), 
-        // we'll explicitly use setDoc with stringified ID if present, or addDoc.
-        // However, our local IDs are Date.now() numbers. Firestore IDs are strings.
-        // Let's iterate and add them.
+// Local Storage Logic
+function loadTodos() {
+    const saved = localStorage.getItem('myPremiumTodos');
+    if (saved) {
         try {
-            // Convert ID to string for doc naming, or generate new one?
-            // Let's keep the existing ID to preserve order/linkage if any.
-            // Using setDoc with specific ID
-            await setDoc(doc(db, "todos", String(todo.id)), todo);
+            todos = JSON.parse(saved);
         } catch (e) {
-            console.error("Error migrating task:", todo, e);
+            console.error('Failed to parse todos', e);
+            todos = [];
         }
     }
-    // Clear local storage after successful migration start to prevent re-migration loop
-    // (In a robust app, we'd wait for all promises, but for this quick migration...)
-    localStorage.removeItem('myPremiumTodos');
-    console.log("Migration complete. LocalStorage cleared.");
+    applyCurrentSort();
 }
+
+async function saveTodos() {
+    // 1. Always save to LocalStorage (Backup/Cache)
+    localStorage.setItem('myPremiumTodos', JSON.stringify(todos));
+
+    // 2. If fileHandle exists, write to file (Auto-Save)
+    if (fileHandle) {
+        try {
+            const writable = await fileHandle.createWritable();
+            await writable.write(JSON.stringify(todos, null, 2));
+            await writable.close();
+        } catch (err) {
+            console.error('Auto-save failed:', err);
+            // If permission gone, maybe notify? For now, silent fail or log.
+            // Possibly reset fileHandle if permission permanently lost?
+            // showToast("Auto-save failed!"); // If we had a toast function
+        }
+    }
+}
+
+// --- File System Access API Functions ---
+
+async function openFile() {
+    try {
+        const [handle] = await window.showOpenFilePicker({
+            types: [{
+                description: 'JSON Files',
+                accept: { 'application/json': ['.json'] }
+            }],
+            multiple: false
+        });
+
+        fileHandle = handle;
+        const file = await fileHandle.getFile();
+        const text = await file.text();
+
+        try {
+            const parsed = JSON.parse(text);
+            if (Array.isArray(parsed)) {
+                todos = parsed;
+                // Update LocalStorage to match the file we just opened
+                saveTodos();
+                applyCurrentSort();
+                updateFileStatus(file.name);
+                alert(`Loaded ${todos.length} tasks from ${file.name}`);
+            } else {
+                alert('Invalid file format: Not an array of tasks.');
+            }
+        } catch (parseErr) {
+            alert('Error parsing JSON file.');
+            console.error(parseErr);
+        }
+
+    } catch (err) {
+        // User cancelled or browser not supported
+        if (err.name !== 'AbortError') {
+            console.error('Open file error:', err);
+            alert('File open failed. (Browser might not support File System Access API)');
+        }
+    }
+}
+
+async function saveFileAs() {
+    try {
+        const handle = await window.showSaveFilePicker({
+            types: [{
+                description: 'JSON Files',
+                accept: { 'application/json': ['.json'] }
+            }],
+            suggestedName: `focus-flow-${new Date().toISOString().split('T')[0]}.json`
+        });
+
+        fileHandle = handle;
+        // Trigger save immediately
+        await saveTodos();
+
+        const file = await fileHandle.getFile();
+        updateFileStatus(file.name);
+        alert(`Saved to ${file.name}. Future changes will auto-save here.`);
+
+    } catch (err) {
+        if (err.name !== 'AbortError') {
+            console.error('Save file error:', err);
+        }
+    }
+}
+
+function updateFileStatus(filename) {
+    if (filename) {
+        fileStatus.style.display = 'inline-block';
+        currentFilenameSpan.textContent = filename;
+        fileStatus.title = "Auto-saving to: " + filename;
+        fileStatus.style.color = 'var(--accent-color)';
+    } else {
+        fileStatus.style.display = 'none';
+        currentFilenameSpan.textContent = 'local storage';
+    }
+}
+
+fileOpenBtn.addEventListener('click', openFile);
+fileSaveAsBtn.addEventListener('click', saveFileAs);
 
 
 // --- Logic Updates (Firestore Writes) ---
@@ -158,10 +241,9 @@ function togglePin(id) {
     const todo = todos.find(t => t.id === id);
     if (!todo) return;
 
-    // Firestore Update
-    updateDoc(doc(db, "todos", String(id)), {
-        pinned: !todo.pinned
-    });
+    todo.pinned = !todo.pinned;
+    saveTodos();
+    applyCurrentSort(); // Re-sort to move pinned items
 }
 
 // Subtask edit handling
@@ -217,25 +299,63 @@ importBtn.addEventListener('click', () => {
     importInput.click();
 });
 
+// PWA Install Logic
+let deferredPrompt;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+    // Prevent the mini-infobar from appearing on mobile
+    e.preventDefault();
+    // Stash the event so it can be triggered later.
+    deferredPrompt = e;
+    // Update UI notify the user they can install the PWA
+    installBtn.style.display = 'inline-flex';
+    logToScreen("Available to install!");
+});
+
+installBtn.addEventListener('click', async () => {
+    // Hide the app provided install promotion
+    installBtn.style.display = 'none';
+    // Show the install prompt
+    deferredPrompt.prompt();
+    // Wait for the user to respond to the prompt
+    const { outcome } = await deferredPrompt.userChoice;
+    console.log(`User response to the install prompt: ${outcome}`);
+    // We've used the prompt, and can't use it again, throw it away
+    deferredPrompt = null;
+});
+
+window.addEventListener('appinstalled', () => {
+    // Hide the app-provided install promotion
+    installBtn.style.display = 'none';
+    // Clear the deferredPrompt so it can be garbage collected
+    deferredPrompt = null;
+    console.log('PWA was installed');
+});
+
 importInput.addEventListener('change', (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
     const reader = new FileReader();
-    reader.onload = async (event) => {
+    reader.onload = (event) => {
         try {
             const parsedData = JSON.parse(event.target.result);
             if (!Array.isArray(parsedData)) throw new Error('Invalid format');
 
-            if (confirm('Importing will add these tasks to your cloud list. Continue?')) {
-                // Batch add or loop add? Loop for simplicity
-                for (const item of parsedData) {
-                    // Use new IDs to avoid collision or overwrite? 
-                    // Let's overwrite if ID exists, or add if new.
-                    // For safety, let's just use setDoc with existing ID
-                    await setDoc(doc(db, "todos", String(item.id)), item);
-                }
-                alert('Data imported successfully to Cloud!');
+            if (confirm('Importing will add these tasks to your list. Continue?')) {
+                let count = 0;
+                parsedData.forEach(item => {
+                    const existingIndex = todos.findIndex(t => t.id === item.id);
+                    if (existingIndex !== -1) {
+                        todos[existingIndex] = item;
+                    } else {
+                        todos.push(item);
+                    }
+                    count++;
+                });
+                saveTodos();
+                applyCurrentSort();
+                alert(`Imported ${count} items.`);
             }
         } catch (error) {
             alert('Failed to import: Invalid JSON file.');
@@ -416,15 +536,9 @@ async function addTodo() {
         pinned: false
     };
 
-    // Firebase Add/Set (Using setDoc with ID to keep control over IDs if needed, or addDoc for auto IDs)
-    // To maintain compatibility with existing logic usually assuming ID is a timestamp number:
-    // We cast to String for the document Key.
-    await setDoc(doc(db, "todos", String(newId)), newTodo);
-
-    // Initial state reset handled locally instantly? 
-    // Or wait for onSnapshot? 
-    // waiting for onSnapshot creates a small lag. 
-    // Optimistic UI updates are better, but let's stick to simple "wait for sync" or "reset inputs immediately"
+    todos.push(newTodo);
+    saveTodos();
+    applyCurrentSort();
 
     todoInput.value = '';
     todoDate.value = '';
@@ -476,30 +590,26 @@ function toggleTodo(id) {
         const mm = String(tomorrow.getMonth() + 1).padStart(2, '0');
         const dd = String(tomorrow.getDate()).padStart(2, '0');
 
-        updateDoc(doc(db, "todos", String(id)), {
-            dueDate: `${yyyy}-${mm}-${dd}`
-        });
-
+        todo.dueDate = `${yyyy}-${mm}-${dd}`;
     } else {
-        // Normal toggle
-        updateDoc(doc(db, "todos", String(id)), {
-            completed: !todo.completed
-        });
+        todo.completed = !todo.completed;
     }
+    saveTodos();
+    applyCurrentSort();
 }
 
 function deleteTodo(id) {
     if (!confirm('Are you sure you want to delete this task?')) return;
-    deleteDoc(doc(db, "todos", String(id)));
+    todos = todos.filter(t => t.id !== id);
+    saveTodos();
+    renderTodos();
 }
 
 function clearCompleted() {
     if (!confirm('Are you sure you want to delete ALL completed tasks?')) return;
-
-    const completedTodos = todos.filter(t => t.completed);
-    completedTodos.forEach(t => {
-        deleteDoc(doc(db, "todos", String(t.id)));
-    });
+    todos = todos.filter(t => !t.completed);
+    saveTodos();
+    renderTodos();
 }
 
 function openEditModal(id) {
@@ -529,13 +639,15 @@ function saveEdit() {
     const newText = editText.value.trim();
     if (newText === '') return;
 
-    // Firestore Update
-    updateDoc(doc(db, "todos", String(editingId)), {
-        text: newText,
-        dueDate: editDate.value,
-        priority: editPriority.value,
-        subtasks: editingSubtasks
-    });
+    const todo = todos.find(t => t.id === editingId);
+    if (todo) {
+        todo.text = newText;
+        todo.dueDate = editDate.value;
+        todo.priority = editPriority.value;
+        todo.subtasks = editingSubtasks;
+        saveTodos();
+        applyCurrentSort();
+    }
 
     closeEditModal();
 }
@@ -568,6 +680,8 @@ function renderTodos() {
 
         return matchesStatus && matchesSearch;
     });
+
+    logToScreen(`Rendering: Total=${todos.length}, Filtered=${filteredTodos.length}, Filter=${currentFilter}`);
 
     const activeCount = todos.filter(t => !t.completed).length;
     itemsLeft.innerText = `${activeCount} item${activeCount !== 1 ? 's' : ''} left`;
@@ -714,12 +828,12 @@ function toggleSubtask(todoId, subtaskId) {
     const todo = todos.find(t => t.id === todoId);
     if (todo && todo.subtasks) {
         // We must update the entire subtasks array for that doc
-        const newSubtasks = todo.subtasks.map(sub =>
+        // We must update the entire subtasks array for that doc
+        todo.subtasks = todo.subtasks.map(sub =>
             sub.id === subtaskId ? { ...sub, completed: !sub.completed } : sub
         );
-        updateDoc(doc(db, "todos", String(todoId)), {
-            subtasks: newSubtasks
-        });
+        saveTodos();
+        renderTodos();
     }
 }
 
