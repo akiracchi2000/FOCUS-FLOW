@@ -25,11 +25,11 @@
     "pinned": true
   },
   {
-    "id": 1765768229124,
-    "text": "古賀竟成館高校 2年教材再作成",
+    "id": 1765775089773,
+    "text": "吉川先生動画編集",
     "dueDate": "2025-12-15",
-    "priority": "high",
-    "completed": true,
+    "priority": "medium",
+    "completed": false,
     "subtasks": [],
     "recurring": false,
     "pinned": false
@@ -39,7 +39,7 @@
     "text": "翔凜中2データ作成",
     "dueDate": "2025-12-15",
     "priority": "medium",
-    "completed": false,
+    "completed": true,
     "subtasks": [],
     "recurring": false
   },

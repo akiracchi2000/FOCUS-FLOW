@@ -14,13 +14,13 @@
     <!-- Phosphor Icons -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=6">
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="icon-512.png">
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./service-worker.js?v=4')
+                navigator.serviceWorker.register('./service-worker.js?v=6')
                     .then(registration => {
                         console.log('ServiceWorker registered');
                         // Optional: Check for updates on load
@@ -57,18 +57,17 @@
                 <input type="file" id="import-input" accept=".json" style="display: none;">
             </div>
             <h1>FOCUS & FLOW</h1>
-            <p class="subtitle">Your personal task sanctuary <span style="font-size: 0.8em; opacity: 0.6;">v1.2.2</span>
+            <p class="subtitle">Your personal task sanctuary <span style="font-size: 0.8em; opacity: 0.6;">v1.2.4</span>
             </p>
         </header>
 
         <div class="input-group">
             <input type="text" id="todo-input" placeholder="What keeps you busy today?" autocomplete="off">
             <div class="input-actions">
-                <select id="todo-priority" aria-label="Priority">
-                    <option value="low">Low</option>
-                    <option value="medium" selected>Medium</option>
-                    <option value="high">High</option>
-                </select>
+                <button id="todo-priority-btn" class="priority-btn" aria-label="Toggle Priority" data-priority="medium"
+                    title="Priority: Medium">
+                    <i class="ph ph-flag"></i>
+                </button>
                 <button id="todo-repeat" aria-label="Toggle Repeat" title="Daily Habit">
                     <i class="ph ph-arrows-clockwise"></i>
                 </button>
@@ -99,7 +98,7 @@
                         <i class="ph ph-calendar-blank"></i>
                     </button>
                     <button id="sort-priority" class="sort-btn" title="Sort by Priority">
-                        <i class="ph ph-warning-circle"></i>
+                        <i class="ph ph-flag"></i>
                     </button>
                 </div>
             </div>

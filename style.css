@@ -196,25 +196,48 @@ h1 {
     background: transparent;
 }
 
-#todo-priority {
-    max-height: none;
-    opacity: 1;
-    overflow: visible;
-    padding: 0 8px;
-    margin: 0;
-    border-width: 0;
-    flex: 0 0 auto;
-    width: auto;
-    font-size: 0.9rem;
+.priority-btn {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-sm);
+    /* Changed from 50% */
+    border: 1px solid var(--glass-border);
+    /* Added border */
     background: transparent;
     color: var(--text-muted);
+    font-size: 1.25rem;
     cursor: pointer;
+    transition: var(--transition);
 }
 
-#todo-priority:focus {
-    box-shadow: none;
-    background: transparent;
-    color: var(--primary-color);
+.priority-btn:hover {
+    background: var(--item-hover-bg);
+    border-color: var(--primary-color);
+    /* Added hover border color */
+    color: var(--text-main);
+}
+
+.priority-btn[data-priority="high"] {
+    color: #ef4444;
+    /* Red */
+}
+
+.priority-btn[data-priority="high"] i {
+    font-weight: bold;
+}
+
+.priority-btn[data-priority="medium"] {
+    color: #f59e0b;
+    /* Orange */
+}
+
+.priority-btn[data-priority="low"] {
+    color: #10b981;
+    /* Green */
 }
 
 #todo-repeat {
@@ -224,8 +247,10 @@ h1 {
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 50%;
-    border: none;
+    border-radius: var(--radius-sm);
+    /* Changed from 50% */
+    border: 1px solid var(--glass-border);
+    /* Added border */
     background: transparent;
     color: var(--text-muted);
     font-size: 1.25rem;
@@ -236,6 +261,8 @@ h1 {
 #todo-repeat:hover {
     background: var(--item-hover-bg);
     color: var(--primary-color);
+    border-color: var(--primary-color);
+    /* Added hover border color */
 }
 
 #todo-repeat.active {
@@ -257,8 +284,10 @@ h1 {
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 50%;
-    border: none;
+    border-radius: var(--radius-sm);
+    /* Changed from 50% */
+    border: 1px solid var(--glass-border);
+    /* Added border */
     background: transparent;
     color: var(--text-muted);
     font-size: 1.25rem;
@@ -269,6 +298,8 @@ h1 {
 #date-trigger:hover {
     background: var(--item-hover-bg);
     color: var(--primary-color);
+    border-color: var(--primary-color);
+    /* Added hover border color */
 }
 
 #date-trigger.has-date {
@@ -720,39 +751,30 @@ body.dark-mode .todo-item.pinned {
     background-color: var(--input-bg);
 }
 
-/* Priority Indicators */
-.priority-indicator {
-    display: inline-block;
-    padding: 1px 6px;
-    border-radius: 12px;
-    font-size: 0.7rem;
-    font-weight: 600;
+/* Priority Indicators (List Icons) */
+.list-priority-icon {
+    font-size: 1.1rem;
     margin-right: 8px;
-    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+}
+
+.list-priority-icon.priority-high {
+    color: #ef4444;
+}
+
+.list-priority-icon.priority-medium {
+    color: #f59e0b;
+}
+
+.list-priority-icon.priority-low {
+    color: #10b981;
 }
 
 .recurring-icon {
     color: var(--primary-color);
     font-size: 1.1rem;
     margin-right: 4px;
-}
-
-.priority-high {
-    background-color: rgba(239, 68, 68, 0.1);
-    color: #ef4444;
-    border: 1px solid rgba(239, 68, 68, 0.2);
-}
-
-.priority-medium {
-    background-color: rgba(234, 179, 8, 0.1);
-    color: #ae8625;
-    border: 1px solid rgba(234, 179, 8, 0.2);
-}
-
-.priority-low {
-    background-color: rgba(16, 185, 129, 0.1);
-    color: #10b981;
-    border: 1px solid rgba(16, 185, 129, 0.2);
 }
 
 .todo-header {

@@ -1,7 +1,7 @@
 // Selector constants
 const todoInput = document.getElementById('todo-input');
 const todoDate = document.getElementById('todo-date');
-const todoPriority = document.getElementById('todo-priority');
+const todoPriorityBtn = document.getElementById('todo-priority-btn');
 const todoRepeatBtn = document.getElementById('todo-repeat');
 const todoList = document.getElementById('todo-list');
 const itemsLeft = document.getElementById('items-left');
@@ -259,11 +259,37 @@ function updateOrder() {
 
 // Event Listeners
 // Allow Enter key on all inputs in the group
-[todoInput, todoDate, todoPriority].forEach(input => {
+// Allow Enter key on inputs
+[todoInput, todoDate].forEach(input => {
     input.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') addTodo();
     });
 });
+
+// Priority Toggle Logic
+todoPriorityBtn.addEventListener('click', () => {
+    const current = todoPriorityBtn.dataset.priority;
+    let next = 'medium';
+    if (current === 'medium') next = 'high';
+    else if (current === 'high') next = 'low';
+    else if (current === 'low') next = 'medium';
+
+    updatePriorityIcon(next);
+});
+
+function updatePriorityIcon(priority) {
+    todoPriorityBtn.dataset.priority = priority;
+    todoPriorityBtn.title = `Priority: ${priority.charAt(0).toUpperCase() + priority.slice(1)}`;
+
+    // Icon changes could be handled here if we wanted different icons per priority
+    // For now, CSS handles color changes based on data-attribute
+    const icon = todoPriorityBtn.querySelector('i');
+    if (priority === 'high') {
+        icon.className = 'ph ph-flag ph-fill'; // Filled flag for high
+    } else {
+        icon.className = 'ph ph-flag'; // Outline for others
+    }
+}
 
 todoRepeatBtn.addEventListener('click', () => {
     isRecurring = !isRecurring;
@@ -306,7 +332,7 @@ editModal.addEventListener('click', (e) => {
 function addTodo() {
     const text = todoInput.value.trim();
     const date = todoDate.value;
-    const priority = todoPriority.value;
+    const priority = todoPriorityBtn.dataset.priority;
     if (text === '') return;
 
     const newTodo = {
@@ -328,7 +354,7 @@ function addTodo() {
     todoInput.value = '';
     todoDate.value = '';
     updateDateTriggerState(); // Reset date trigger visual
-    todoPriority.value = 'medium'; // Reset to default
+    updatePriorityIcon('medium'); // Reset to default
 
     // Reset recurring state
     isRecurring = false;
@@ -520,11 +546,11 @@ function renderTodos() {
         li.draggable = true; // Enable Drag
         li.style.animationDelay = `${index * 0.05}s`; // Staggered animation
 
-        // Priority indicator
+        // Priority indicator (Icon)
         let priorityHtml = '';
-        if (todo.priority === 'high') priorityHtml = '<span class="priority-indicator priority-high">High</span>';
-        else if (todo.priority === 'medium') priorityHtml = '<span class="priority-indicator priority-medium">Medium</span>';
-        else if (todo.priority === 'low') priorityHtml = '<span class="priority-indicator priority-low">Low</span>';
+        if (todo.priority === 'high') priorityHtml = '<i class="ph ph-flag ph-fill list-priority-icon priority-high" title="High Priority"></i>';
+        else if (todo.priority === 'medium') priorityHtml = '<i class="ph ph-flag list-priority-icon priority-medium" title="Medium Priority"></i>';
+        else if (todo.priority === 'low') priorityHtml = '<i class="ph ph-flag list-priority-icon priority-low" title="Low Priority"></i>';
 
         // Recurring Icon
         const recurringHtml = todo.recurring
