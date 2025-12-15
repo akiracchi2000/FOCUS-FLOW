@@ -14,7 +14,7 @@
     <!-- Phosphor Icons -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
-    <link rel="stylesheet" href="style.css?v=1.4.3">
+    <link rel="stylesheet" href="style.css?v=1.5.0">
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="icon-512.png">
     <script>
@@ -67,7 +67,7 @@
                 <input type="file" id="import-input" accept=".json" style="display: none;">
             </div>
             <h1>FOCUS & FLOW</h1>
-            <p class="subtitle">Your personal task sanctuary <span style="font-size: 0.8em; opacity: 0.6;">v1.4.0</span>
+            <p class="subtitle">Your personal task sanctuary <span style="font-size: 0.8em; opacity: 0.6;">v1.5.0</span>
             </p>
             <div id="file-status" class="file-status"
                 style="display: none; font-size: 0.8rem; opacity: 0.8; margin-top: 4px;">
@@ -140,12 +140,19 @@
             <h2>Edit Task</h2>
             <div class="modal-form">
                 <input type="text" id="edit-text" placeholder="Task description">
-                <input type="date" id="edit-date">
-                <select id="edit-priority">
-                    <option value="low">Low</option>
-                    <option value="medium">Medium</option>
-                    <option value="high">High</option>
-                </select>
+                <div class="edit-actions-row">
+                    <button id="edit-priority-btn" class="priority-btn" aria-label="Toggle Priority"
+                        data-priority="medium" title="Priority: Medium">
+                        <i class="ph ph-flag"></i>
+                    </button>
+                    <div class="date-picker-wrapper">
+                        <button id="edit-date-trigger" class="date-trigger" aria-label="Select Date"
+                            title="Set Due Date">
+                            <i class="ph ph-calendar-plus"></i>
+                        </button>
+                        <input type="date" id="edit-date" aria-label="Due Date">
+                    </div>
+                </div>
             </div>
             <div class="modal-actions">
                 <button id="cancel-edit" class="modal-btn secondary">Cancel</button>

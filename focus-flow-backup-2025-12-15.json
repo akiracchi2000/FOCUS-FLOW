@@ -1,15 +1,5 @@
 [
   {
-    "id": 1765736040318,
-    "text": "基本大全BC原稿作成",
-    "dueDate": "2025-12-15",
-    "priority": "high",
-    "completed": false,
-    "subtasks": [],
-    "recurring": true,
-    "pinned": true
-  },
-  {
     "id": 1765733912880,
     "text": "基本大全 数学BC原稿作成【数列】",
     "dueDate": "2026-01-10",
@@ -19,7 +9,7 @@
       {
         "id": 1765734875322,
         "text": "シグマ関連",
-        "completed": false
+        "completed": true
       },
       {
         "id": 1765734889355,
@@ -30,30 +20,73 @@
         "id": 1765734898895,
         "text": "数学的帰納法関連",
         "completed": false
+      },
+      {
+        "id": 1765788502615,
+        "text": "群数列関連",
+        "completed": false
       }
     ],
     "pinned": true
   },
   {
-    "id": 1765730812974,
-    "text": "翔凜高1データ送付",
-    "dueDate": "2025-12-15",
+    "id": 1765792211781,
+    "text": "実務教育出版SPI",
+    "dueDate": "2026-02-15",
     "priority": "high",
     "completed": false,
-    "pinned": true
+    "subtasks": [
+      {
+        "id": 1765792223969,
+        "text": "スライド作成",
+        "completed": false
+      },
+      {
+        "id": 1765792250307,
+        "text": "動画収録",
+        "completed": false
+      },
+      {
+        "id": 1765792255770,
+        "text": "動画編集",
+        "completed": false
+      }
+    ],
+    "recurring": false,
+    "pinned": false
+  },
+  {
+    "id": 1765788806340,
+    "text": "吉川先生動画編集",
+    "dueDate": "2025-12-15",
+    "priority": "medium",
+    "completed": true,
+    "subtasks": [],
+    "recurring": false,
+    "pinned": false
+  },
+  {
+    "id": 1765736040318,
+    "text": "基本大全BC原稿作成",
+    "dueDate": "2025-12-16",
+    "priority": "high",
+    "completed": false,
+    "subtasks": [],
+    "recurring": true,
+    "pinned": false
   },
   {
     "id": 1765735842307,
     "text": "翔凜中3データ作成",
     "dueDate": "2025-12-15",
     "priority": "medium",
-    "completed": false,
+    "completed": true,
     "subtasks": [],
     "recurring": false
   },
   {
     "id": 1765735596561,
-    "text": "問題データ作成",
+    "text": "大全アプリ問題データ作成",
     "dueDate": "2025-12-15",
     "priority": "high",
     "completed": false,
@@ -64,15 +97,16 @@
     "id": 1765733824593,
     "text": "定期テスト対策動画校正",
     "dueDate": "2025-12-19",
-    "priority": "medium",
-    "completed": false
+    "priority": "low",
+    "completed": false,
+    "subtasks": []
   },
   {
     "id": 1765733001654,
     "text": "岡本君　東大問題準備",
     "dueDate": "2025-12-15",
     "priority": "medium",
-    "completed": false
+    "completed": true
   },
   {
     "id": 1765732415489,
@@ -82,10 +116,19 @@
     "completed": false
   },
   {
+    "id": 1765730812974,
+    "text": "翔凜高1データ送付",
+    "dueDate": "2025-12-15",
+    "priority": "high",
+    "completed": true,
+    "pinned": false
+  },
+  {
     "id": 1765730601581,
     "text": "IRL IIIC予習",
     "dueDate": "2025-12-19",
-    "completed": false,
-    "priority": "medium"
+    "completed": true,
+    "priority": "medium",
+    "pinned": false
   }
 ]
