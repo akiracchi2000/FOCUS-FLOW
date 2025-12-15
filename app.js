@@ -29,8 +29,61 @@ const addSubtaskBtn = document.getElementById('addSubtaskBtn');
 // State
 let todos = JSON.parse(localStorage.getItem('myPremiumTodos')) || [];
 let currentFilter = 'all';
+let currentSort = 'default'; // default, date, priority
 let searchQuery = '';
 let editingId = null;
+
+// ... (Initialize) ...
+
+// Sorting Logic
+function sortPinnedFirst(a, b) {
+    if (a.pinned && !b.pinned) return -1;
+    if (!a.pinned && b.pinned) return 1;
+    return 0;
+}
+
+function applyCurrentSort() {
+    todos.sort((a, b) => {
+        // Always prioritize pinned first
+        const pinSort = sortPinnedFirst(a, b);
+        if (pinSort !== 0) return pinSort;
+
+        // Then apply specific sort
+        if (currentSort === 'date') {
+            if (!a.dueDate) return 1;
+            if (!b.dueDate) return -1;
+            return new Date(a.dueDate) - new Date(b.dueDate);
+        } else if (currentSort === 'priority') {
+            const priorityWeight = { high: 3, medium: 2, low: 1 };
+            // If strictly equal, fallback to ID? Or keep stable?
+            return priorityWeight[b.priority] - priorityWeight[a.priority];
+        } else {
+            // Default: Newest first (ID descending)
+            // This ensures when unpinned, it goes back to creation order
+            return b.id - a.id;
+        }
+    });
+    saveAndRender();
+}
+
+function sortByDate() {
+    currentSort = 'date';
+    applyCurrentSort();
+}
+
+function sortByPriority() {
+    currentSort = 'priority';
+    applyCurrentSort();
+}
+
+// ... (Listeners) ...
+
+function togglePin(id) {
+    todos = todos.map(todo =>
+        todo.id === id ? { ...todo, pinned: !todo.pinned } : todo
+    );
+    applyCurrentSort();
+}
 let editingSubtasks = [];
 let isRecurring = false;
 
@@ -118,26 +171,7 @@ searchInput.addEventListener('input', (e) => {
     renderTodos();
 });
 
-// Sorting Logic
-function sortByDate() {
-    todos.sort((a, b) => {
-        if (!a.dueDate) return 1;
-        if (!b.dueDate) return -1;
-        return new Date(a.dueDate) - new Date(b.dueDate);
-    });
-    saveAndRender();
-}
-
-function sortByPriority() {
-    const priorityWeight = { high: 3, medium: 2, low: 1 };
-    todos.sort((a, b) => {
-        return priorityWeight[b.priority] - priorityWeight[a.priority];
-    });
-    saveAndRender();
-}
-
-sortDateBtn.addEventListener('click', sortByDate);
-sortPriorityBtn.addEventListener('click', sortByPriority);
+// (Removed redundant sort functions)
 
 // Drag and Drop Logic
 function enableDragAndDrop() {
@@ -282,7 +316,8 @@ function addTodo() {
         priority: priority,
         completed: false,
         subtasks: [],
-        recurring: isRecurring
+        recurring: isRecurring,
+        pinned: false
     };
 
     todos.unshift(newTodo); // Add to top
@@ -316,6 +351,8 @@ function updateDateTriggerState() {
         dateTrigger.title = 'Set Due Date';
     }
 }
+
+
 
 function toggleTodo(id) {
     const todo = todos.find(t => t.id === id);
@@ -481,6 +518,14 @@ function renderTodos() {
             ? '<i class="ph ph-arrows-clockwise recurring-icon" title="Daily Habit"></i>'
             : '';
 
+        // Pin Button
+        const pinClass = todo.pinned ? 'active' : '';
+        const pinHtml = `
+            <button class="pin-btn ${pinClass}" aria-label="Toggle Pin" title="${todo.pinned ? 'Unpin' : 'Pin to top'}">
+                <i class="ph ph-push-pin ${todo.pinned ? 'ph-fill' : ''}"></i>
+            </button>
+        `;
+
         const dateInfo = formatDueDate(todo.dueDate);
         const dateHtml = todo.dueDate
             ? `<span class="todo-date"><i class="ph ph-calendar-blank"></i> ${dateInfo.text}</span>`
@@ -488,6 +533,10 @@ function renderTodos() {
 
         if (dateInfo.class) {
             li.classList.add(dateInfo.class);
+        }
+
+        if (todo.pinned) {
+            li.classList.add('pinned');
         }
 
         // Subtasks HTML
@@ -516,6 +565,7 @@ function renderTodos() {
                     ${recurringHtml}
                     ${priorityHtml}
                     <span class="todo-text">${escapeHtml(todo.text)}</span>
+                    ${pinHtml}
                 </div>
                 ${dateHtml}
                 ${subtasksHtml}
@@ -526,6 +576,13 @@ function renderTodos() {
         `;
 
         // Event Delegation within LI
+
+        // Pin button click
+        const pinBtn = li.querySelector('.pin-btn');
+        pinBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            togglePin(todo.id);
+        });
 
         // Check circle click -> Toggle Complete
         const checkCircle = li.querySelector('.check-circle');

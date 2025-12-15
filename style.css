@@ -585,6 +585,50 @@ h1 {
     background: rgba(239, 68, 68, 0.1);
 }
 
+/* Pin Button */
+.pin-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 2px;
+    border-radius: 50%;
+    transition: var(--transition);
+    opacity: 0.3;
+    /* Always slightly visible */
+    /* Hidden by default similar to delete */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+}
+
+.todo-item:hover .pin-btn,
+.pin-btn.active {
+    opacity: 1;
+}
+
+.pin-btn:hover {
+    background: rgba(99, 102, 241, 0.1);
+    color: var(--primary-color);
+}
+
+.pin-btn.active {
+    color: var(--primary-color);
+    transform: rotate(45deg);
+}
+
+/* Pinned Task Style */
+.todo-item.pinned {
+    border-left: 3px solid var(--primary-color);
+    background: rgba(255, 255, 255, 0.6);
+    /* Slightly more opaque/highlighted */
+}
+
+body.dark-mode .todo-item.pinned {
+    background: rgba(30, 41, 59, 0.6);
+}
+
 /* Status Bar */
 .status-bar {
     display: flex;
