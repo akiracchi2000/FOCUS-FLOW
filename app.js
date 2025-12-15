@@ -289,6 +289,7 @@ function addTodo() {
     saveAndRender();
     todoInput.value = '';
     todoDate.value = '';
+    updateDateTriggerState(); // Reset date trigger visual
     todoPriority.value = 'medium'; // Reset to default
 
     // Reset recurring state
@@ -296,6 +297,24 @@ function addTodo() {
     todoRepeatBtn.classList.remove('active');
 
     todoInput.focus();
+}
+
+// Date Trigger Logic
+const dateTrigger = document.getElementById('date-trigger');
+const addBtn = document.getElementById('add-btn');
+
+todoDate.addEventListener('change', updateDateTriggerState);
+addBtn.addEventListener('click', addTodo);
+
+function updateDateTriggerState() {
+    if (todoDate.value) {
+        dateTrigger.classList.add('has-date');
+        // Optional: Tooltip update
+        dateTrigger.title = `Due: ${todoDate.value}`;
+    } else {
+        dateTrigger.classList.remove('has-date');
+        dateTrigger.title = 'Set Due Date';
+    }
 }
 
 function toggleTodo(id) {

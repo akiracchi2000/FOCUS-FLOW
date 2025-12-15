@@ -35,10 +35,10 @@
         <header>
             <div class="header-controls">
                 <button id="import-btn" aria-label="Import Data" title="Import Data">
-                    <i class="ph ph-upload-simple"></i>
+                    <i class="ph ph-download-simple"></i>
                 </button>
                 <button id="export-btn" aria-label="Export Data" title="Export Data">
-                    <i class="ph ph-download-simple"></i>
+                    <i class="ph ph-upload-simple"></i>
                 </button>
                 <button id="theme-toggle" aria-label="Toggle Dark Mode" title="Toggle Theme">
                     <i class="ph ph-moon"></i>
@@ -51,15 +51,28 @@
 
         <div class="input-group">
             <input type="text" id="todo-input" placeholder="What keeps you busy today?" autocomplete="off">
-            <select id="todo-priority" aria-label="Priority">
-                <option value="low">Low</option>
-                <option value="medium" selected>Medium</option>
-                <option value="high">High</option>
-            </select>
-            <button id="todo-repeat" aria-label="Toggle Repeat" title="Daily Habit">
-                <i class="ph ph-arrows-clockwise"></i>
+            <div class="input-actions">
+                <select id="todo-priority" aria-label="Priority">
+                    <option value="low">Low</option>
+                    <option value="medium" selected>Medium</option>
+                    <option value="high">High</option>
+                </select>
+                <button id="todo-repeat" aria-label="Toggle Repeat" title="Daily Habit">
+                    <i class="ph ph-arrows-clockwise"></i>
+                </button>
+                <div class="date-picker-wrapper">
+                    <button id="date-trigger" aria-label="Select Date" title="Set Due Date">
+                        <i class="ph ph-calendar-plus"></i>
+                    </button>
+                    <input type="date" id="todo-date" aria-label="Due Date">
+                </div>
+            </div>
+        </div>
+
+        <div class="add-btn-container">
+            <button id="add-btn" aria-label="Add Task" title="Add Task">
+                <i class="ph ph-plus"></i>
             </button>
-            <input type="date" id="todo-date" aria-label="Due Date">
         </div>
 
         <div class="actions-bar">

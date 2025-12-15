@@ -91,8 +91,8 @@ body {
 
 /* App Container (Glassmorphism) */
 .app-container {
-    width: 90%;
-    max-width: 500px;
+    width: 95%;
+    max-width: 600px;
     background: var(--glass-bg);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
@@ -163,78 +163,168 @@ h1 {
 .input-group {
     display: flex;
     gap: 0;
-    /* Remove gap to control spacing manually */
     margin-bottom: 2rem;
-    flex-wrap: wrap;
     transition: var(--transition);
+    position: relative;
+    background: var(--input-bg);
+    border-radius: var(--radius-md);
+    border: 2px solid var(--glass-border);
+    padding: 0.5rem;
+    align-items: center;
+}
+
+.input-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    padding-left: 8px;
+    border-left: 1px solid var(--glass-border);
 }
 
 #todo-input {
-    width: 100%;
-    flex: 0 0 100%;
-    /* Force full width always */
-    z-index: 2;
-}
-
-#todo-date,
-#todo-priority {
-    max-height: 0;
-    opacity: 0;
-    overflow: hidden;
-    padding: 0;
-    /* Removing horizontal padding is key */
-    margin: 0;
-    border-width: 0;
-    flex: 0 0 0;
-    /* Take no space */
-    width: 0;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* Secondary inputs force new line */
-.input-group:focus-within #todo-date,
-.input-group:focus-within #todo-priority {
-    max-height: 60px;
-    opacity: 1;
-    padding: 1rem 1.25rem;
-    border-width: 2px;
-    margin-top: 8px;
-    flex: 0 0 100%;
-    /* Expand to full width */
-    width: 100%;
-}
-
-#todo-input,
-#todo-date,
-#todo-priority {
-    padding: 1rem 1.25rem;
-    border-radius: var(--radius-md);
-    border: 2px solid var(--glass-border);
-    background: var(--input-bg);
-    font-family: var(--font-family);
+    flex: 1;
+    border: none;
+    background: transparent;
+    padding: 0.5rem 1rem;
     font-size: 1rem;
     color: var(--text-main);
-    transition: var(--transition);
-    outline: none;
+    border-radius: 0;
 }
 
-#todo-input:focus,
-#todo-date:focus,
+#todo-input:focus {
+    box-shadow: none;
+    background: transparent;
+}
+
+#todo-priority {
+    max-height: none;
+    opacity: 1;
+    overflow: visible;
+    padding: 0 8px;
+    margin: 0;
+    border-width: 0;
+    flex: 0 0 auto;
+    width: auto;
+    font-size: 0.9rem;
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+}
+
 #todo-priority:focus {
-    background: var(--input-focus-bg);
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+    box-shadow: none;
+    background: transparent;
+    color: var(--primary-color);
+}
+
+#todo-repeat {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: none;
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 1.25rem;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+#todo-repeat:hover {
+    background: var(--item-hover-bg);
+    color: var(--primary-color);
+}
+
+#todo-repeat.active {
+    background: rgba(99, 102, 241, 0.1);
+    color: var(--primary-color);
+}
+
+/* Date Picker Wrapper */
+.date-picker-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+#date-trigger {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: none;
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 1.25rem;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+#date-trigger:hover {
+    background: var(--item-hover-bg);
+    color: var(--primary-color);
+}
+
+#date-trigger.has-date {
+    color: var(--primary-color);
+    background: rgba(99, 102, 241, 0.1);
 }
 
 #todo-date {
-    flex: 0 0 auto;
-    width: 160px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
     cursor: pointer;
-    color: var(--text-muted);
+    z-index: 10;
+    margin-bottom: 1rem;
+    transition: var(--transition);
+    position: relative;
+    background: var(--input-bg);
+    border-radius: var(--radius-md);
+    border: 2px solid var(--glass-border);
+    padding: 0.5rem;
+    align-items: center;
 }
 
-#todo-date:valid {
-    color: var(--text-main);
+/* ... existing styles ... */
+
+.add-btn-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1rem;
+    margin-top: -1rem;
+    /* Pull it up closer to input */
+}
+
+#add-btn {
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: none;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    font-size: 1.25rem;
+    cursor: pointer;
+    transition: var(--transition);
+    box-shadow: 0 4px 10px rgba(99, 102, 241, 0.4);
+}
+
+#add-btn:hover {
+    transform: scale(1.1) rotate(90deg);
+    box-shadow: 0 6px 15px rgba(99, 102, 241, 0.6);
 }
 
 
@@ -371,8 +461,8 @@ h1 {
 .todo-item {
     background: var(--item-bg);
     border-radius: var(--radius-md);
-    padding: 1rem;
-    margin-bottom: 0.75rem;
+    padding: 0.6rem 0.8rem;
+    margin-bottom: 0.4rem;
     display: flex;
     align-items: center;
     gap: 12px;
@@ -437,8 +527,8 @@ h1 {
 }
 
 .check-circle {
-    width: 24px;
-    height: 24px;
+    width: 20px;
+    height: 20px;
     border-radius: 50%;
     border: 2px solid #cbd5e1;
     display: flex;
@@ -457,7 +547,7 @@ h1 {
 }
 
 .check-circle i {
-    font-size: 14px;
+    font-size: 12px;
     opacity: 0;
     transform: scale(0.5);
     transition: var(--transition);
@@ -470,7 +560,7 @@ h1 {
 
 .todo-text {
     flex: 1;
-    font-size: 1.05rem;
+    font-size: 0.95rem;
     font-weight: 500;
 }
 
@@ -543,7 +633,7 @@ h1 {
 }
 
 .todo-date {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     color: var(--text-muted);
     display: flex;
     align-items: center;
@@ -592,9 +682,9 @@ h1 {
 /* Priority Indicators */
 .priority-indicator {
     display: inline-block;
-    padding: 2px 8px;
+    padding: 1px 6px;
     border-radius: 12px;
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     font-weight: 600;
     margin-right: 8px;
     text-transform: uppercase;
