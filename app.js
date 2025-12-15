@@ -73,7 +73,12 @@ function loadTodos() {
     const saved = localStorage.getItem('myPremiumTodos');
     if (saved) {
         try {
-            todos = JSON.parse(saved);
+            const parsed = JSON.parse(saved);
+            if (Array.isArray(parsed)) {
+                todos = parsed;
+            } else {
+                todos = [];
+            }
         } catch (e) {
             console.error('Failed to parse todos', e);
             todos = [];

@@ -1,8 +1,8 @@
-const CACHE_NAME = 'focus-flow-v1.3.4';
+const CACHE_NAME = 'focus-flow-v1.4.5';
 const ASSETS_TO_CACHE = [
     './',
     './index.html',
-    './style.css',
+    './style.css?v=1.4.3',
     './app.js',
     './manifest.json',
     'https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap',
