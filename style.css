@@ -278,22 +278,18 @@ h1 {
 
 #todo-date {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
     opacity: 0;
-    cursor: pointer;
-    z-index: 10;
     pointer-events: none;
-    margin-bottom: 1rem;
-    transition: var(--transition);
-    position: relative;
-    background: var(--input-bg);
-    border-radius: var(--radius-md);
-    border: 2px solid var(--glass-border);
-    padding: 0.5rem;
-    align-items: center;
+    z-index: -1;
+    border: none;
+    padding: 0;
+    margin-right: 180px;
+    /* Shift anchor significantly left to prevent overflow */
 }
 
 /* ... existing styles ... */
