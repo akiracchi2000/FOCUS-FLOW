@@ -11,7 +11,8 @@ const firebaseConfig = {
     projectId: "focus-and-flow-dae6d",
     storageBucket: "focus-and-flow-dae6d.firebasestorage.app",
     messagingSenderId: "405455188678",
-    appId: "1:405455188678:web:9b71e55895f211ba40ddc7"
+    appId: "1:405455188678:web:9b71e55895f211ba40ddc7",
+    measurementId: "G-6EENEVK4PF"
 };
 
 // Initialize Firebase
