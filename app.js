@@ -39,7 +39,7 @@ const addSubtaskBtn = document.getElementById('addSubtaskBtn');
 
 // State
 let todos = []; // Now managed by Firestore listener
-let currentFilter = 'all';
+let currentFilter = 'active';
 let currentSort = 'default'; // default, date, priority
 let searchQuery = '';
 let editingId = null;
@@ -678,6 +678,15 @@ function toggleTodo(id) {
         todo.dueDate = `${yyyy}-${mm}-${dd}`;
     } else {
         todo.completed = !todo.completed;
+        if (todo.completed) {
+            const now = new Date();
+            const yyyy = now.getFullYear();
+            const mm = String(now.getMonth() + 1).padStart(2, '0');
+            const dd = String(now.getDate()).padStart(2, '0');
+            todo.completedDate = `${yyyy}-${mm}-${dd}`;
+        } else {
+            todo.completedDate = null;
+        }
     }
     saveTodos();
     applyCurrentSort();
@@ -796,8 +805,8 @@ function renderTodos() {
             </button>
         `;
 
-        const dateInfo = formatDueDate(todo.dueDate, todo.completed);
-        const dateHtml = todo.dueDate
+        const dateInfo = formatDueDate(todo.dueDate, todo.completed, todo.completedDate);
+        const dateHtml = dateInfo.text
             ? `<span class="todo-date"><i class="ph ph-calendar-blank"></i> ${dateInfo.text}</span>`
             : '';
 
@@ -889,11 +898,16 @@ function escapeHtml(text) {
     return div.innerHTML;
 }
 
-function formatDueDate(dateString, isCompleted) {
+function formatDueDate(dateString, isCompleted, completedDate) {
+    if (isCompleted && completedDate) {
+        // Format: YYYY-MM-DD → YYYY-MM-DD完了済み
+        const displayDueDate = dateString ? dateString : '---';
+        return { text: `${displayDueDate} → ${completedDate}完了済み`, class: 'date-completed' };
+    }
+
     if (!dateString) return { text: '', class: '' };
 
     // Explicitly parse YYYY-MM-DD to create a local Date object at 00:00:00
-    // This avoids UTC offset issues with new Date("YYYY-MM-DD")
     const [year, month, day] = dateString.split('-').map(Number);
     const date = new Date(year, month - 1, day);
 
@@ -902,7 +916,6 @@ function formatDueDate(dateString, isCompleted) {
     tomorrow.setDate(today.getDate() + 1);
 
     // Normalize comparison dates to 00:00:00 local time
-    // date is already 00:00:00 local because of the constructor above
     today.setHours(0, 0, 0, 0);
     tomorrow.setHours(0, 0, 0, 0);
 
