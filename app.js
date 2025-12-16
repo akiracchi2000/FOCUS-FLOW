@@ -45,6 +45,11 @@ let searchQuery = '';
 let editingId = null;
 let fileHandle = null; // Reference to the open file
 
+// Drag and Drop State
+let longPressTimer;
+let isDragMode = false;
+let startY = 0;
+
 // Collection Reference
 // Collection Reference Removed
 // const todosCollection = collection(db, "todos");
@@ -393,12 +398,14 @@ searchInput.addEventListener('input', (e) => {
 // NOTE: Implementing robust DnD sync is complex (linked lists or fractional indexing).
 // I will comment out the persistent save in updateOrder to avoid mass writes.
 
+
+
 function enableDragAndDrop() {
     const draggables = document.querySelectorAll('.todo-item');
-    const container = document.getElementById('todo-list');
+    // Note: Container listeners are now bound globally to prevent stacking
 
     draggables.forEach(draggable => {
-        // Mouse Events
+        // Mouse Events (Standard DnD)
         draggable.addEventListener('dragstart', () => {
             draggable.classList.add('dragging');
         });
@@ -407,33 +414,59 @@ function enableDragAndDrop() {
             draggable.classList.remove('dragging');
         });
 
-        // Touch Events (Mobile DnD Polyfill-ish logic)
-        draggable.addEventListener('touchstart', () => {
-            draggable.classList.add('dragging');
-            // Add a clearer visual cue for touch drag if needed
+        // Touch Events (Long Press Logic)
+        draggable.addEventListener('touchstart', (e) => {
+            // Reset state
+            isDragMode = false;
+            startY = e.touches[0].clientY;
+
+            // Start long press timer
+            longPressTimer = setTimeout(() => {
+                isDragMode = true;
+                draggable.classList.add('dragging');
+                // Haptic feedback if available
+                if (navigator.vibrate) navigator.vibrate(50);
+            }, 500); // 500ms threshold
         }, { passive: true });
 
         draggable.addEventListener('touchend', () => {
+            clearTimeout(longPressTimer);
+            isDragMode = false;
             draggable.classList.remove('dragging');
-            // Remove any temp visual cues
+        });
+
+        draggable.addEventListener('touchcancel', () => {
+            clearTimeout(longPressTimer);
+            isDragMode = false;
+            draggable.classList.remove('dragging');
         });
     });
-
-    let currentAfterElement = null;
-
-    // Mouse DragOver
-    container.addEventListener('dragover', e => {
-        e.preventDefault();
-        handleDragMove(container, e.clientY);
-    });
-
-    // Touch Move
-    container.addEventListener('touchmove', e => {
-        e.preventDefault(); // Prevent scrolling while dragging
-        const touch = e.touches[0];
-        handleDragMove(container, touch.clientY);
-    }, { checkFn: null, passive: false }); // explicit non-passive to allow preventDefault
 }
+
+// Global Drag and Drop Container Listeners (Bind once)
+const dndContainer = document.getElementById('todo-list');
+
+// Mouse DragOver
+dndContainer.addEventListener('dragover', e => {
+    e.preventDefault();
+    handleDragMove(dndContainer, e.clientY);
+});
+
+// Touch Move
+dndContainer.addEventListener('touchmove', e => {
+    if (!isDragMode) {
+        // If moving significantly before timer fires, cancel timer (user is scrolling)
+        const currentY = e.touches[0].clientY;
+        if (Math.abs(currentY - startY) > 10) {
+            clearTimeout(longPressTimer);
+        }
+        return; // Allow default scrolling
+    }
+
+    e.preventDefault(); // Prevent scrolling while dragging
+    const touch = e.touches[0];
+    handleDragMove(dndContainer, touch.clientY);
+}, { passive: false });
 
 function handleDragMove(container, clientY) {
     const afterElement = getDragAfterElement(container, clientY);
