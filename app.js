@@ -44,11 +44,95 @@ let currentSort = 'default'; // default, date, priority
 let searchQuery = '';
 let editingId = null;
 let fileHandle = null; // Reference to the open file
+let isSaving = false; // Track save status
+let currentFileName = null; // Track current filename
 
+// ... (Drag and Drop State omitted for brevity if unchanged, but included in original file)
 // Drag and Drop State
 let longPressTimer;
 let isDragMode = false;
 let startY = 0;
+
+
+// --- Initialization & Migration ---
+
+document.addEventListener('DOMContentLoaded', async () => {
+    loadTheme();
+
+    // Prevent closing if saving
+    window.addEventListener('beforeunload', (e) => {
+        if (isSaving) {
+            e.preventDefault();
+            e.returnValue = ''; // Standard for Chrome
+        }
+    });
+
+    await checkSavedHandle(); // Check if we should restore a file
+    // Note: loadTodos is called inside checkSavedHandle if file exists, else we call it manually
+    if (!fileHandle) {
+        loadTodos();
+    }
+});
+
+// ...
+
+async function saveTodos() {
+    isSaving = true;
+    updateFileStatus(currentFileName, 'Saving...');
+
+    // 1. Always save to LocalStorage (Backup/Cache)
+    localStorage.setItem('myPremiumTodos', JSON.stringify(todos));
+
+    // 2. If fileHandle exists, write to file (Auto-Save)
+    if (fileHandle) {
+        try {
+            const writable = await fileHandle.createWritable();
+            await writable.write(JSON.stringify(todos, null, 2));
+            await writable.close();
+
+            // Success feedback
+            updateFileStatus(currentFileName, 'Saved');
+            setTimeout(() => {
+                if (!isSaving) updateFileStatus(currentFileName); // Revert to filename only
+            }, 2000);
+        } catch (err) {
+            console.error('Auto-save failed:', err);
+            showToast('Auto-save failed! Click to reconnect.', 'error', {
+                text: 'Retry',
+                callback: () => saveTodos() // Simple retry
+            });
+            updateFileStatus(currentFileName, 'Error saving');
+        }
+    }
+
+    isSaving = false;
+}
+
+// ...
+
+function updateFileStatus(filename, statusOverride = null) {
+    if (filename) {
+        currentFileName = filename; // Store for later
+        fileStatus.style.display = 'inline-block';
+
+        const icon = statusOverride === 'Saving...' ? '<i class="ph ph-spinner ph-spin"></i>' :
+            statusOverride === 'Saved' ? '<i class="ph ph-check-circle"></i>' :
+                '<i class="ph ph-file-text"></i>';
+
+        const text = statusOverride ? `${filename} - ${statusOverride}` : filename;
+
+        currentFilenameSpan.innerHTML = text;
+        fileStatus.innerHTML = `${icon} <span id="current-filename">${text}</span>`;
+
+        fileStatus.title = "Auto-saving to: " + filename;
+        fileStatus.style.color = 'var(--accent-color)';
+    } else {
+        fileStatus.style.display = 'none';
+        currentFilenameSpan.textContent = 'local storage';
+        currentFileName = null;
+    }
+}
+
 
 // Collection Reference
 // Collection Reference Removed
@@ -60,6 +144,99 @@ const logToScreen = (msg) => {
     console.log(msg);
 };
 
+// --- Toast Notification Logic ---
+function showToast(message, type = 'info', action = null) {
+    let container = document.querySelector('.toast-container');
+    if (!container) {
+        container = document.createElement('div');
+        container.className = 'toast-container';
+        document.body.appendChild(container);
+    }
+
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+
+    const textSpan = document.createElement('span');
+    textSpan.textContent = message;
+    toast.appendChild(textSpan);
+
+    if (action) {
+        const btn = document.createElement('button');
+        btn.className = 'toast-action-btn';
+        btn.textContent = action.text;
+        btn.onclick = () => {
+            action.callback();
+            hideToast(toast);
+        };
+        toast.appendChild(btn);
+    }
+
+    container.appendChild(toast);
+
+    // Auto hide after 3 seconds unless it's an error or has action
+    if (type !== 'error' && !action) {
+        setTimeout(() => hideToast(toast), 3000);
+    }
+}
+
+function hideToast(toast) {
+    toast.classList.add('hiding');
+    toast.addEventListener('animationend', () => {
+        toast.remove();
+    });
+}
+
+// --- IndexedDB Helper (SimpleIDB) ---
+const DB_NAME = 'FocusFlowDB';
+const STORE_NAME = 'files';
+const DB_VERSION = 1;
+
+const SimpleIDB = {
+    async getDB() {
+        return new Promise((resolve, reject) => {
+            const request = indexedDB.open(DB_NAME, DB_VERSION);
+            request.onerror = () => reject(request.error);
+            request.onsuccess = () => resolve(request.result);
+            request.onupgradeneeded = (event) => {
+                const db = event.target.result;
+                if (!db.objectStoreNames.contains(STORE_NAME)) {
+                    db.createObjectStore(STORE_NAME);
+                }
+            };
+        });
+    },
+    async set(key, value) {
+        const db = await this.getDB();
+        return new Promise((resolve, reject) => {
+            const tx = db.transaction(STORE_NAME, 'readwrite');
+            const store = tx.objectStore(STORE_NAME);
+            const req = store.put(value, key);
+            req.onsuccess = () => resolve();
+            req.onerror = () => reject(req.error);
+        });
+    },
+    async get(key) {
+        const db = await this.getDB();
+        return new Promise((resolve, reject) => {
+            const tx = db.transaction(STORE_NAME, 'readonly');
+            const store = tx.objectStore(STORE_NAME);
+            const req = store.get(key);
+            req.onsuccess = () => resolve(req.result);
+            req.onerror = () => reject(req.error);
+        });
+    },
+    async del(key) {
+        const db = await this.getDB();
+        return new Promise((resolve, reject) => {
+            const tx = db.transaction(STORE_NAME, 'readwrite');
+            const store = tx.objectStore(STORE_NAME);
+            const req = store.delete(key);
+            req.onsuccess = () => resolve();
+            req.onerror = () => reject(req.error);
+        });
+    }
+};
+
 // Global Error Handler - Removed for production
 // ...
 logToScreen("App module loaded.");
@@ -67,10 +244,79 @@ logToScreen("Auth Domain: " + (typeof firebaseConfig !== 'undefined' ? firebaseC
 
 // --- Initialization & Migration ---
 
-document.addEventListener('DOMContentLoaded', () => {
-    loadTheme();
-    loadTodos();
-});
+// (Replaced by listener at top of file)
+
+// Helper: Check for saved handle in IDB
+async function checkSavedHandle() {
+    try {
+        const saved = await SimpleIDB.get('lastFileHandle');
+        if (saved && saved.handle && saved.name) {
+            // Found a saved handle. We need to verify permission.
+            // If we can't get permission immediately (requires gesture), we prompt.
+            const hasPerm = await verifyPermission(saved.handle, false);
+            if (hasPerm) {
+                fileHandle = saved.handle;
+                updateFileStatus(saved.name);
+                // Attempt to load content from it
+                await loadFileContent(fileHandle);
+                showToast(`Resumed session: ${saved.name}`, 'success');
+            } else {
+                // Trigger UI to ask user
+                showToast(`Reconnect to ${saved.name}?`, 'info', {
+                    text: 'Connect',
+                    callback: async () => {
+                        const granted = await verifyPermission(saved.handle, true);
+                        if (granted) {
+                            fileHandle = saved.handle;
+                            updateFileStatus(saved.name);
+                            await loadFileContent(fileHandle);
+                            showToast('Connected!', 'success');
+                        } else {
+                            showToast('Permission denied. Using local storage.', 'error');
+                            SimpleIDB.del('lastFileHandle');
+                        }
+                    }
+                });
+            }
+        }
+    } catch (e) {
+        console.error("Error restoring handle:", e);
+    }
+}
+
+async function verifyPermission(fileHandle, withWrite) {
+    const options = {};
+    if (withWrite) {
+        options.mode = 'readwrite';
+    }
+    // Check if we already have permission, if so, return true.
+    if ((await fileHandle.queryPermission(options)) === 'granted') {
+        return true;
+    }
+    // Request permission to the file, if the user grants permission, return true.
+    if ((await fileHandle.requestPermission(options)) === 'granted') {
+        return true;
+    }
+    // The user did not grant permission, return false.
+    return false;
+}
+
+// Logic to load content from handle (extracted from openFile)
+async function loadFileContent(handle) {
+    try {
+        const file = await handle.getFile();
+        const text = await file.text();
+        const parsed = JSON.parse(text);
+        if (Array.isArray(parsed)) {
+            todos = parsed;
+            localStorage.setItem('myPremiumTodos', JSON.stringify(todos)); // Sync local
+            applyCurrentSort();
+        }
+    } catch (err) {
+        console.error('Failed to load file content', err);
+        showToast('Failed to read file content', 'error');
+    }
+}
 
 // Real-time Listener (Replaces load from localStorage)
 // This runs once on load, and then every time data changes on server
@@ -93,89 +339,124 @@ function loadTodos() {
     applyCurrentSort();
 }
 
-async function saveTodos() {
-    // 1. Always save to LocalStorage (Backup/Cache)
-    localStorage.setItem('myPremiumTodos', JSON.stringify(todos));
-
-    // 2. If fileHandle exists, write to file (Auto-Save)
-    if (fileHandle) {
-        try {
-            const writable = await fileHandle.createWritable();
-            await writable.write(JSON.stringify(todos, null, 2));
-            await writable.close();
-        } catch (err) {
-            console.error('Auto-save failed:', err);
-            // If permission gone, maybe notify? For now, silent fail or log.
-            // Possibly reset fileHandle if permission permanently lost?
-            // showToast("Auto-save failed!"); // If we had a toast function
-        }
-    }
-}
+// saveTodos replaced by new version at top of file
 
 // --- File System Access API Functions ---
 
 async function openFile() {
-    try {
-        const [handle] = await window.showOpenFilePicker({
-            types: [{
-                description: 'JSON Files',
-                accept: { 'application/json': ['.json'] }
-            }],
-            multiple: false
-        });
-
-        fileHandle = handle;
-        const file = await fileHandle.getFile();
-        const text = await file.text();
-
+    // Check if File System Access API is supported
+    if (window.showOpenFilePicker) {
         try {
-            const parsed = JSON.parse(text);
-            if (Array.isArray(parsed)) {
-                todos = parsed;
-                // Update LocalStorage to match the file we just opened
-                saveTodos();
-                applyCurrentSort();
-                updateFileStatus(file.name);
-                alert(`Loaded ${todos.length} tasks from ${file.name}`);
-            } else {
-                alert('Invalid file format: Not an array of tasks.');
-            }
-        } catch (parseErr) {
-            alert('Error parsing JSON file.');
-            console.error(parseErr);
-        }
+            const [handle] = await window.showOpenFilePicker({
+                types: [{
+                    description: 'JSON Files',
+                    accept: { 'application/json': ['.json'] }
+                }],
+                multiple: false
+            });
 
-    } catch (err) {
-        // User cancelled or browser not supported
-        if (err.name !== 'AbortError') {
-            console.error('Open file error:', err);
-            alert('File open failed. (Browser might not support File System Access API)');
+            fileHandle = handle;
+            const file = await fileHandle.getFile();
+
+            // PERSIST HANDLE
+            await SimpleIDB.set('lastFileHandle', { handle: fileHandle, name: file.name });
+
+            const text = await file.text();
+            processLoadedContent(text, file.name);
+
+        } catch (err) {
+            // User cancelled or error
+            if (err.name !== 'AbortError') {
+                console.error('Open file error:', err);
+                // Fallback if API exists but fails for some reason? 
+                // Mostly likely user just cancelled. 
+                // But if it was a security error etc, maybe fallback?
+                // Let's rely on detection. 
+            }
         }
+    } else {
+        // Fallback for Mobile / Unsupported Browsers
+        document.getElementById('file-open-input').click();
+    }
+}
+
+// Handler for the hidden file input (Fallback Open)
+document.getElementById('file-open-input').addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+        processLoadedContent(event.target.result, file.name);
+        fileHandle = null; // No handle in fallback mode
+        updateFileStatus(file.name, '(Read Only)');
+        // Clear input so same file can be selected again
+        e.target.value = '';
+    };
+    reader.readAsText(file);
+});
+
+function processLoadedContent(text, filename) {
+    try {
+        const parsed = JSON.parse(text);
+        if (Array.isArray(parsed)) {
+            todos = parsed;
+            // Update LocalStorage to match the file we just opened
+            saveTodos();
+            applyCurrentSort();
+            updateFileStatus(filename);
+            showToast(`Loaded ${todos.length} tasks`, 'success');
+        } else {
+            alert('Invalid file format: Not an array of tasks.');
+        }
+    } catch (parseErr) {
+        alert('Error parsing JSON file.');
+        console.error(parseErr);
     }
 }
 
 async function saveFileAs() {
-    try {
-        const handle = await window.showSaveFilePicker({
-            types: [{
-                description: 'JSON Files',
-                accept: { 'application/json': ['.json'] }
-            }],
-            suggestedName: `focus-flow-${new Date().toISOString().split('T')[0]}.json`
-        });
+    if (window.showSaveFilePicker) {
+        try {
+            const handle = await window.showSaveFilePicker({
+                types: [{
+                    description: 'JSON Files',
+                    accept: { 'application/json': ['.json'] }
+                }],
+                suggestedName: `focus-flow-${new Date().toISOString().split('T')[0]}.json`
+            });
 
-        fileHandle = handle;
-        // Trigger save immediately
-        await saveTodos();
+            fileHandle = handle;
+            const file = await fileHandle.getFile();
 
-        const file = await fileHandle.getFile();
-        updateFileStatus(file.name);
-        alert(`Saved to ${file.name}. Future changes will auto-save here.`);
+            // PERSIST HANDLE
+            await SimpleIDB.set('lastFileHandle', { handle: fileHandle, name: file.name });
 
-    } catch (err) {
-        if (err.name !== 'AbortError') {
-            console.error('Save file error:', err);
+            // Trigger save immediately
+            await saveTodos();
+
+            updateFileStatus(file.name);
+            showToast(`Saved to ${file.name}`, 'success');
+
+        } catch (err) {
+            if (err.name !== 'AbortError') {
+                console.error('Save file error:', err);
+                showToast('Save failed', 'error');
+            }
         }
+    } else {
+        // Fallback: Download for Mobile
+        const dataStr = JSON.stringify(todos, null, 2);
+        constblob = new Blob([dataStr], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `focus-flow-${new Date().toISOString().split('T')[0]}.json`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        showToast('File downloaded', 'success');
     }
 }
 

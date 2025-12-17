@@ -40,6 +40,67 @@
     "pinned": true
   },
   {
+    "id": 1766002816874,
+    "text": "アガルート数列例題84(1)修正連絡",
+    "dueDate": "2025-12-18",
+    "priority": "medium",
+    "completed": false,
+    "subtasks": [],
+    "recurring": false,
+    "pinned": false
+  },
+  {
+    "id": 1766002015774,
+    "text": "スタディーエイドインストール",
+    "dueDate": "2025-12-18",
+    "priority": "medium",
+    "completed": false,
+    "subtasks": [],
+    "recurring": false,
+    "pinned": false
+  },
+  {
+    "id": 1766000902079,
+    "text": "アガルート数学B解答作成",
+    "dueDate": "2025-12-20",
+    "priority": "medium",
+    "completed": false,
+    "subtasks": [],
+    "recurring": false,
+    "pinned": false
+  },
+  {
+    "id": 1765994496098,
+    "text": "翔凜　中1・中2課題作成3セット",
+    "dueDate": "2025-12-22",
+    "priority": "high",
+    "completed": false,
+    "subtasks": [],
+    "recurring": false,
+    "pinned": false
+  },
+  {
+    "id": 1765994459452,
+    "text": "エデュコン返信",
+    "dueDate": "2025-12-18",
+    "priority": "medium",
+    "completed": true,
+    "subtasks": [],
+    "recurring": false,
+    "pinned": false,
+    "completedDate": "2025-12-18"
+  },
+  {
+    "id": 1765894029380,
+    "text": "岡本君　東大演習問題・課題準備",
+    "dueDate": "2025-12-20",
+    "priority": "medium",
+    "completed": false,
+    "subtasks": [],
+    "recurring": false,
+    "pinned": false
+  },
+  {
     "id": 1765877618480,
     "text": "堀内さんに返信",
     "dueDate": "2025-12-16",
@@ -49,15 +110,6 @@
     "recurring": false,
     "pinned": false,
     "completedDate": "2025-12-17"
-  },
-  {
-    "id": 1765735596561,
-    "text": "大全アプリ問題データ作成",
-    "dueDate": "2025-12-16",
-    "priority": "high",
-    "completed": false,
-    "subtasks": [],
-    "recurring": true
   },
   {
     "id": 1765864469711,
@@ -80,6 +132,37 @@
     "recurring": false,
     "pinned": false,
     "completedDate": "2025-12-16"
+  },
+  {
+    "id": 1765861471663,
+    "text": "絶対値のグラフのグラフモードの検討",
+    "dueDate": "2025-12-18",
+    "priority": "medium",
+    "completed": false,
+    "subtasks": [],
+    "recurring": false,
+    "pinned": false
+  },
+  {
+    "id": 1765857378147,
+    "text": "チェックアプリの検討",
+    "dueDate": "2025-12-16",
+    "priority": "low",
+    "completed": true,
+    "subtasks": [],
+    "recurring": false,
+    "pinned": false,
+    "completedDate": "2025-12-16"
+  },
+  {
+    "id": 1765855369132,
+    "text": "健康保険加入状況確認書取り寄せ【連絡】",
+    "dueDate": "2025-12-18",
+    "priority": "high",
+    "completed": false,
+    "subtasks": [],
+    "recurring": false,
+    "pinned": false
   },
   {
     "id": 1765855290625,
@@ -115,75 +198,14 @@
     "completedDate": "2025-12-16"
   },
   {
-    "id": 1765845649101,
-    "text": "F&F DONE時の日時追加機能検討",
-    "dueDate": "2025-12-16",
-    "priority": "medium",
-    "completed": true,
-    "subtasks": [],
-    "recurring": false,
-    "pinned": false,
-    "completedDate": "2025-12-16"
-  },
-  {
-    "id": 1765857378147,
-    "text": "チェックアプリの検討",
-    "dueDate": "2025-12-16",
-    "priority": "low",
-    "completed": true,
-    "subtasks": [],
-    "recurring": false,
-    "pinned": false,
-    "completedDate": "2025-12-16"
-  },
-  {
-    "id": 1765736040318,
-    "text": "基本大全BC原稿作成",
-    "dueDate": "2025-12-17",
-    "priority": "high",
-    "completed": false,
-    "subtasks": [],
-    "recurring": true,
-    "pinned": false
-  },
-  {
-    "id": 1765855369132,
-    "text": "健康保険加入状況確認書取り寄せ【連絡】",
-    "dueDate": "2025-12-18",
-    "priority": "high",
-    "completed": false,
-    "subtasks": [],
-    "recurring": false,
-    "pinned": false
-  },
-  {
-    "id": 1765994459452,
-    "text": "エデュコン返信",
-    "dueDate": "2025-12-18",
-    "priority": "medium",
-    "completed": true,
-    "subtasks": [],
-    "recurring": false,
-    "pinned": false,
-    "completedDate": "2025-12-18"
-  },
-  {
-    "id": 1765861471663,
-    "text": "絶対値のグラフのグラフモードの検討",
-    "dueDate": "2025-12-18",
+    "id": 1765847818595,
+    "text": "キッズコーポレーション　マイナンバー提出",
+    "dueDate": "2025-12-19",
     "priority": "medium",
     "completed": false,
     "subtasks": [],
     "recurring": false,
     "pinned": false
-  },
-  {
-    "id": 1765732415489,
-    "text": "定期テスト対策動画　微分積分法",
-    "dueDate": "2025-12-18",
-    "priority": "low",
-    "completed": false,
-    "subtasks": []
   },
   {
     "id": 1765847801277,
@@ -196,42 +218,15 @@
     "pinned": false
   },
   {
-    "id": 1765847818595,
-    "text": "キッズコーポレーション　マイナンバー提出",
-    "dueDate": "2025-12-19",
+    "id": 1765845649101,
+    "text": "F&F DONE時の日時追加機能検討",
+    "dueDate": "2025-12-16",
     "priority": "medium",
-    "completed": false,
+    "completed": true,
     "subtasks": [],
     "recurring": false,
-    "pinned": false
-  },
-  {
-    "id": 1765733824593,
-    "text": "定期テスト対策動画校正",
-    "dueDate": "2025-12-19",
-    "priority": "low",
-    "completed": false,
-    "subtasks": []
-  },
-  {
-    "id": 1765894029380,
-    "text": "岡本君　東大演習問題・課題準備",
-    "dueDate": "2025-12-20",
-    "priority": "medium",
-    "completed": false,
-    "subtasks": [],
-    "recurring": false,
-    "pinned": false
-  },
-  {
-    "id": 1765994496098,
-    "text": "翔凜　中1・中2課題作成3セット",
-    "dueDate": "2025-12-22",
-    "priority": "high",
-    "completed": false,
-    "subtasks": [],
-    "recurring": false,
-    "pinned": false
+    "pinned": false,
+    "completedDate": "2025-12-16"
   },
   {
     "id": 1765792211781,
@@ -258,5 +253,40 @@
     ],
     "recurring": false,
     "pinned": false
+  },
+  {
+    "id": 1765736040318,
+    "text": "基本大全BC原稿作成",
+    "dueDate": "2025-12-17",
+    "priority": "high",
+    "completed": false,
+    "subtasks": [],
+    "recurring": true,
+    "pinned": false
+  },
+  {
+    "id": 1765735596561,
+    "text": "大全アプリ問題データ作成",
+    "dueDate": "2025-12-16",
+    "priority": "high",
+    "completed": false,
+    "subtasks": [],
+    "recurring": true
+  },
+  {
+    "id": 1765733824593,
+    "text": "定期テスト対策動画校正",
+    "dueDate": "2025-12-19",
+    "priority": "low",
+    "completed": false,
+    "subtasks": []
+  },
+  {
+    "id": 1765732415489,
+    "text": "定期テスト対策動画　微分積分法",
+    "dueDate": "2025-12-18",
+    "priority": "low",
+    "completed": false,
+    "subtasks": []
   }
 ]

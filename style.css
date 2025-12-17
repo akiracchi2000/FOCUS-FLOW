@@ -41,6 +41,10 @@ body.dark-mode {
     --item-hover-bg: rgba(30, 41, 59, 0.8);
 }
 
+html {
+    font-size: 14px;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -93,14 +97,14 @@ body {
 
 /* App Container (Glassmorphism) */
 .app-container {
-    width: 95%;
-    max-width: 600px;
+    width: 100%;
+    max-width: 360px;
     background: var(--glass-bg);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border: 1px solid var(--glass-border);
     border-radius: var(--radius-lg);
-    padding: 2.5rem;
+    padding: 1.5rem;
     box-shadow: var(--glass-shadow);
     transform: translateY(0);
     transition: var(--transition);
@@ -1245,15 +1249,27 @@ body.dark-mode .todo-item.pinned {
     .modal-form {
         flex: 1;
         overflow-y: auto;
+        justify-content: flex-start;
+        /* Force pack to top */
+    }
+
+    .modal-form>input,
+    .modal-form>div {
+        flex-grow: 0;
+        /* Prevent unwanted stretching */
     }
 
     .modal-actions {
-        padding-top: 1rem;
+        padding-top: 0.5rem;
+        /* Reduced from 1rem */
+        padding-bottom: 0.5rem;
+        /* Add reduced bottom padding */
     }
 
     .modal-btn {
         flex: 1;
-        padding: 1rem;
+        padding: 0.8rem;
+        /* Slightly reduced to fit better if needed, or keep 1rem */
     }
 
     /* Status Bar */
@@ -1272,5 +1288,88 @@ body.dark-mode .todo-item.pinned {
         flex: 1;
         text-align: center;
         padding: 8px;
+    }
+}
+
+/* Toast Notifications */
+.toast-container {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 1000;
+    pointer-events: none;
+}
+
+.toast {
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+    color: var(--text-main);
+    padding: 12px 24px;
+    border-radius: var(--radius-md);
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    animation: toastSlideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    pointer-events: auto;
+    min-width: 300px;
+    justify-content: space-between;
+}
+
+.toast.success {
+    border-left: 4px solid #10b981;
+}
+
+.toast.error {
+    border-left: 4px solid #ef4444;
+}
+
+.toast.info {
+    border-left: 4px solid var(--primary-color);
+}
+
+.toast.hiding {
+    animation: toastFadeOut 0.3s forwards;
+}
+
+.toast-action-btn {
+    background: rgba(99, 102, 241, 0.1);
+    color: var(--primary-color);
+    border: 1px solid var(--primary-color);
+    padding: 4px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: var(--transition);
+}
+
+.toast-action-btn:hover {
+    background: var(--primary-color);
+    color: white;
+}
+
+@keyframes toastSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes toastFadeOut {
+    to {
+        opacity: 0;
+        transform: translateY(-10px);
     }
 }
