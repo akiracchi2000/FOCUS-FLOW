@@ -1,9 +1,9 @@
-const CACHE_NAME = 'focus-flow-v1.5.1';
+const CACHE_NAME = 'focus-flow-v1.5.2';
 const ASSETS_TO_CACHE = [
     './',
     './index.html',
-    './style.css?v=1.5.0',
-    './app.js',
+    './style.css?v=1.5.2',
+    './app.js?v=1.5.2',
     './manifest.json',
     'https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap',
     'https://unpkg.com/@phosphor-icons/web'

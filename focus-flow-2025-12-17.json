@@ -1,0 +1,240 @@
+[
+  {
+    "id": 1765861471663,
+    "text": "絶対値のグラフのグラフモードの検討",
+    "dueDate": "2025-12-18",
+    "priority": "medium",
+    "completed": false,
+    "subtasks": [],
+    "recurring": false,
+    "pinned": true
+  },
+  {
+    "id": 1765847737938,
+    "text": "トレーニングノートα BC第5章再校〆切",
+    "dueDate": "2025-12-18",
+    "priority": "high",
+    "completed": false,
+    "subtasks": [],
+    "recurring": false,
+    "pinned": true
+  },
+  {
+    "id": 1765733912880,
+    "text": "基本大全 数学BC原稿作成【数列】",
+    "dueDate": "2026-01-10",
+    "priority": "high",
+    "completed": false,
+    "subtasks": [
+      {
+        "id": 1765734875322,
+        "text": "シグマ関連",
+        "completed": true
+      },
+      {
+        "id": 1765734889355,
+        "text": "漸化式関連",
+        "completed": false
+      },
+      {
+        "id": 1765734898895,
+        "text": "数学的帰納法関連",
+        "completed": false
+      },
+      {
+        "id": 1765788502615,
+        "text": "群数列関連",
+        "completed": false
+      }
+    ],
+    "pinned": true
+  },
+  {
+    "id": 1765894029380,
+    "text": "岡本君　東大演習問題・課題準備",
+    "dueDate": "2025-12-20",
+    "priority": "medium",
+    "completed": false,
+    "subtasks": [],
+    "recurring": false,
+    "pinned": false
+  },
+  {
+    "id": 1765877618480,
+    "text": "堀内さんに返信",
+    "dueDate": "2025-12-16",
+    "priority": "high",
+    "completed": true,
+    "subtasks": [],
+    "recurring": false,
+    "pinned": false,
+    "completedDate": "2025-12-17"
+  },
+  {
+    "id": 1765864469711,
+    "text": "プロンプトを抽出して保存するアプリ開発",
+    "dueDate": "2025-12-16",
+    "priority": "medium",
+    "completed": true,
+    "subtasks": [],
+    "recurring": false,
+    "pinned": false,
+    "completedDate": "2025-12-16"
+  },
+  {
+    "id": 1765861525761,
+    "text": "文字の太さを3pxに変更",
+    "dueDate": "2025-12-16",
+    "priority": "medium",
+    "completed": true,
+    "subtasks": [],
+    "recurring": false,
+    "pinned": false,
+    "completedDate": "2025-12-16"
+  },
+  {
+    "id": 1765857378147,
+    "text": "チェックアプリの検討",
+    "dueDate": "2025-12-16",
+    "priority": "low",
+    "completed": true,
+    "subtasks": [],
+    "recurring": false,
+    "pinned": false,
+    "completedDate": "2025-12-16"
+  },
+  {
+    "id": 1765855369132,
+    "text": "健康保険加入状況確認書取り寄せ【連絡】",
+    "dueDate": "2025-12-18",
+    "priority": "high",
+    "completed": false,
+    "subtasks": [],
+    "recurring": false,
+    "pinned": false
+  },
+  {
+    "id": 1765855290625,
+    "text": "アガルート解答修正",
+    "dueDate": "2025-12-16",
+    "priority": "medium",
+    "completed": false,
+    "subtasks": [],
+    "recurring": false,
+    "pinned": false
+  },
+  {
+    "id": 1765852488970,
+    "text": "大全ファイル化アプリ検討",
+    "dueDate": "2025-12-16",
+    "priority": "medium",
+    "completed": true,
+    "subtasks": [],
+    "recurring": false,
+    "pinned": false,
+    "completedDate": "2025-12-16"
+  },
+  {
+    "id": 1765848875419,
+    "text": "大全アプリ　解像度チェック",
+    "dueDate": "2025-12-16",
+    "priority": "medium",
+    "completed": true,
+    "subtasks": [],
+    "recurring": false,
+    "pinned": false,
+    "completedDate": "2025-12-16"
+  },
+  {
+    "id": 1765847818595,
+    "text": "キッズコーポレーション　マイナンバー提出",
+    "dueDate": "2025-12-19",
+    "priority": "medium",
+    "completed": false,
+    "subtasks": [],
+    "recurring": false,
+    "pinned": false
+  },
+  {
+    "id": 1765847801277,
+    "text": "健康診断経費申請",
+    "dueDate": "2025-12-19",
+    "priority": "high",
+    "completed": false,
+    "subtasks": [],
+    "recurring": false,
+    "pinned": false
+  },
+  {
+    "id": 1765845649101,
+    "text": "F&F DONE時の日時追加機能検討",
+    "dueDate": "2025-12-16",
+    "priority": "medium",
+    "completed": true,
+    "subtasks": [],
+    "recurring": false,
+    "pinned": false,
+    "completedDate": "2025-12-16"
+  },
+  {
+    "id": 1765792211781,
+    "text": "実務教育出版SPI",
+    "dueDate": "2026-02-15",
+    "priority": "high",
+    "completed": false,
+    "subtasks": [
+      {
+        "id": 1765792223969,
+        "text": "スライド作成",
+        "completed": false
+      },
+      {
+        "id": 1765792250307,
+        "text": "動画収録",
+        "completed": false
+      },
+      {
+        "id": 1765792255770,
+        "text": "動画編集",
+        "completed": false
+      }
+    ],
+    "recurring": false,
+    "pinned": false
+  },
+  {
+    "id": 1765736040318,
+    "text": "基本大全BC原稿作成",
+    "dueDate": "2025-12-17",
+    "priority": "high",
+    "completed": false,
+    "subtasks": [],
+    "recurring": true,
+    "pinned": false
+  },
+  {
+    "id": 1765735596561,
+    "text": "大全アプリ問題データ作成",
+    "dueDate": "2025-12-16",
+    "priority": "high",
+    "completed": false,
+    "subtasks": [],
+    "recurring": true
+  },
+  {
+    "id": 1765733824593,
+    "text": "定期テスト対策動画校正",
+    "dueDate": "2025-12-19",
+    "priority": "low",
+    "completed": false,
+    "subtasks": []
+  },
+  {
+    "id": 1765732415489,
+    "text": "定期テスト対策動画　微分積分法",
+    "dueDate": "2025-12-18",
+    "priority": "low",
+    "completed": false,
+    "subtasks": []
+  }
+]

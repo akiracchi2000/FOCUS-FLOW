@@ -14,13 +14,13 @@
     <!-- Phosphor Icons -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
-    <link rel="stylesheet" href="style.css?v=1.5.1">
+    <link rel="stylesheet" href="style.css?v=1.5.2">
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="icon-512.png">
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./service-worker.js?v=1.5.1')
+                navigator.serviceWorker.register('./service-worker.js?v=1.5.2')
                     .then(registration => {
                         console.log('ServiceWorker registered');
                         registration.update();
@@ -68,7 +68,7 @@
                 <input type="file" id="import-input" accept=".json" style="display: none;">
             </div>
             <h1>FOCUS & FLOW</h1>
-            <p class="subtitle">Your personal task sanctuary <span style="font-size: 0.8em; opacity: 0.6;">v1.5.1</span>
+            <p class="subtitle">Your personal task sanctuary <span style="font-size: 0.8em; opacity: 0.6;">v1.5.2</span>
             </p>
             <div id="file-status" class="file-status"
                 style="display: none; font-size: 0.8rem; opacity: 0.8; margin-top: 4px;">
@@ -176,7 +176,7 @@
 
     <!-- Firebase Config & App Logic -->
     <!-- Note: app.js is now a module to support Firebase imports -->
-    <script src="app.js?v=1.5.1"></script>
+    <script src="app.js?v=1.5.2"></script>
 </body>
 
 </html>
