@@ -470,24 +470,14 @@ h1 {
 }
 
 /* Date Highlights (Border) */
-.todo-item.date-today {
-    border-color: #ef4444;
-    background: rgba(239, 68, 68, 0.05);
-    /* Very subtle red tint */
-}
-
 .todo-item.date-today .todo-date {
     font-weight: 700;
-}
-
-.todo-item.date-tomorrow {
-    border-color: #f59e0b;
-    background: rgba(245, 158, 11, 0.05);
-    /* Very subtle orange tint */
+    color: #ef4444;
 }
 
 .todo-item.date-tomorrow .todo-date {
     font-weight: 700;
+    color: #f59e0b;
 }
 
 .todo-item.overdue {

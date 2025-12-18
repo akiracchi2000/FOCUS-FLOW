@@ -10,6 +10,32 @@
     "pinned": true
   },
   {
+    "id": 1765792211781,
+    "text": "実務教育出版SPI",
+    "dueDate": "2026-02-15",
+    "priority": "high",
+    "completed": false,
+    "subtasks": [
+      {
+        "id": 1765792223969,
+        "text": "スライド作成",
+        "completed": false
+      },
+      {
+        "id": 1765792250307,
+        "text": "動画収録",
+        "completed": false
+      },
+      {
+        "id": 1765792255770,
+        "text": "動画編集",
+        "completed": false
+      }
+    ],
+    "recurring": false,
+    "pinned": true
+  },
+  {
     "id": 1765733912880,
     "text": "基本大全 数学BC原稿作成【数列】",
     "dueDate": "2026-01-10",
@@ -241,35 +267,9 @@
     "completedDate": "2025-12-16"
   },
   {
-    "id": 1765792211781,
-    "text": "実務教育出版SPI",
-    "dueDate": "2026-02-15",
-    "priority": "high",
-    "completed": false,
-    "subtasks": [
-      {
-        "id": 1765792223969,
-        "text": "スライド作成",
-        "completed": false
-      },
-      {
-        "id": 1765792250307,
-        "text": "動画収録",
-        "completed": false
-      },
-      {
-        "id": 1765792255770,
-        "text": "動画編集",
-        "completed": false
-      }
-    ],
-    "recurring": false,
-    "pinned": false
-  },
-  {
     "id": 1765736040318,
     "text": "基本大全BC原稿作成",
-    "dueDate": "2025-12-18",
+    "dueDate": "2025-12-19",
     "priority": "high",
     "completed": false,
     "subtasks": [],
