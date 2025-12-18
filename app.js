@@ -67,7 +67,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 
-    await checkSavedHandle(); // Check if we should restore a file
+    if ('showOpenFilePicker' in window) {
+        await checkSavedHandle(); // Check if we should restore a file
+    }
+
     // Note: loadTodos is called inside checkSavedHandle if file exists, else we call it manually
     if (!fileHandle) {
         loadTodos();
@@ -97,12 +100,13 @@ async function saveTodos() {
             }, 2000);
         } catch (err) {
             console.error('Auto-save failed:', err);
-            showToast('Auto-save failed! Click to reconnect.', 'error', {
-                text: 'Retry',
-                callback: () => saveTodos() // Simple retry
-            });
             updateFileStatus(currentFileName, 'Error saving');
         }
+    } else {
+        // Simulate save delay for UI feedback if local only
+        setTimeout(() => {
+            updateFileStatus(currentFileName);
+        }, 500);
     }
 
     isSaving = false;
@@ -237,15 +241,6 @@ const SimpleIDB = {
     }
 };
 
-// Global Error Handler - Removed for production
-// ...
-logToScreen("App module loaded.");
-logToScreen("Auth Domain: " + (typeof firebaseConfig !== 'undefined' ? firebaseConfig.authDomain : 'Unknown'));
-
-// --- Initialization & Migration ---
-
-// (Replaced by listener at top of file)
-
 // Helper: Check for saved handle in IDB
 async function checkSavedHandle() {
     try {
@@ -318,34 +313,12 @@ async function loadFileContent(handle) {
     }
 }
 
-// Real-time Listener (Replaces load from localStorage)
-// This runs once on load, and then every time data changes on server
-// Local Storage Logic
-function loadTodos() {
-    const saved = localStorage.getItem('myPremiumTodos');
-    if (saved) {
-        try {
-            const parsed = JSON.parse(saved);
-            if (Array.isArray(parsed)) {
-                todos = parsed;
-            } else {
-                todos = [];
-            }
-        } catch (e) {
-            console.error('Failed to parse todos', e);
-            todos = [];
-        }
-    }
-    applyCurrentSort();
-}
-
-// saveTodos replaced by new version at top of file
 
 // --- File System Access API Functions ---
 
 async function openFile() {
-    // Check if File System Access API is supported
-    if (window.showOpenFilePicker) {
+    // Check if File System Access API is supported (PC)
+    if ('showOpenFilePicker' in window) {
         try {
             const [handle] = await window.showOpenFilePicker({
                 types: [{
@@ -368,10 +341,6 @@ async function openFile() {
             // User cancelled or error
             if (err.name !== 'AbortError') {
                 console.error('Open file error:', err);
-                // Fallback if API exists but fails for some reason? 
-                // Mostly likely user just cancelled. 
-                // But if it was a security error etc, maybe fallback?
-                // Let's rely on detection. 
             }
         }
     } else {
@@ -388,8 +357,8 @@ document.getElementById('file-open-input').addEventListener('change', (e) => {
     const reader = new FileReader();
     reader.onload = (event) => {
         processLoadedContent(event.target.result, file.name);
-        fileHandle = null; // No handle in fallback mode
-        updateFileStatus(file.name, '(Read Only)');
+        // fileHandle = null; // No handle in fallback mode
+        updateFileStatus(file.name);
         // Clear input so same file can be selected again
         e.target.value = '';
     };
@@ -416,7 +385,7 @@ function processLoadedContent(text, filename) {
 }
 
 async function saveFileAs() {
-    if (window.showSaveFilePicker) {
+    if ('showSaveFilePicker' in window) {
         try {
             const handle = await window.showSaveFilePicker({
                 types: [{
@@ -447,7 +416,7 @@ async function saveFileAs() {
     } else {
         // Fallback: Download for Mobile
         const dataStr = JSON.stringify(todos, null, 2);
-        constblob = new Blob([dataStr], { type: 'application/json' });
+        const blob = new Blob([dataStr], { type: 'application/json' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;

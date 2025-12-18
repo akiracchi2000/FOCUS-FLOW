@@ -14,13 +14,13 @@
     <!-- Phosphor Icons -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
-    <link rel="stylesheet" href="style.css?v=1.5.3">
-    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="style.css?v=1.5.7">
+    <link rel="manifest" href="manifest.json?v=1.5.7">
     <link rel="apple-touch-icon" href="icon-512.png">
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./service-worker.js?v=1.5.3')
+                navigator.serviceWorker.register('./service-worker.js?v=1.5.7')
                     .then(registration => {
                         console.log('ServiceWorker registered');
                         registration.update();
@@ -70,7 +70,7 @@
                 <input type="file" id="file-open-input" accept=".json" style="display: none;">
             </div>
             <h1>FOCUS & FLOW</h1>
-            <p class="subtitle">Your personal task sanctuary <span style="font-size: 0.8em; opacity: 0.6;">v1.5.3</span>
+            <p class="subtitle">Your personal task sanctuary <span style="font-size: 0.8em; opacity: 0.6;">v1.5.7</span>
             </p>
             <div id="file-status" class="file-status"
                 style="display: none; font-size: 0.8rem; opacity: 0.8; margin-top: 4px;">
@@ -178,7 +178,7 @@
 
     <!-- Firebase Config & App Logic -->
     <!-- Note: app.js is now a module to support Firebase imports -->
-    <script src="app.js?v=1.5.2"></script>
+    <script src="app.js?v=1.5.7"></script>
 </body>
 
 </html>

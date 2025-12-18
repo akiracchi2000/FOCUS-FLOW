@@ -1,9 +1,9 @@
-const CACHE_NAME = 'focus-flow-v1.5.3';
+const CACHE_NAME = 'focus-flow-v1.5.7';
 const ASSETS_TO_CACHE = [
     './',
     './index.html',
-    './style.css?v=1.5.3',
-    './app.js?v=1.5.3',
+    './style.css?v=1.5.7',
+    './app.js?v=1.5.7',
     './manifest.json',
     'https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap',
     'https://unpkg.com/@phosphor-icons/web'
@@ -26,7 +26,7 @@ self.addEventListener('install', (event) => {
 // Fetch Event - Serve from Cache if available, else Network
 self.addEventListener('fetch', (event) => {
     event.respondWith(
-        caches.match(event.request)
+        caches.match(event.request, { ignoreSearch: true })
             .then((response) => {
                 // Cache hit - return response
                 if (response) {

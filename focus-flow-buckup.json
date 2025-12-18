@@ -40,14 +40,25 @@
     "pinned": true
   },
   {
+    "id": 1766006670574,
+    "text": "IRL 高2数学IIIC予習",
+    "dueDate": "",
+    "priority": "medium",
+    "completed": false,
+    "subtasks": [],
+    "recurring": true,
+    "pinned": false
+  },
+  {
     "id": 1766002816874,
     "text": "アガルート数列例題84(1)修正連絡",
     "dueDate": "2025-12-18",
     "priority": "medium",
-    "completed": false,
+    "completed": true,
     "subtasks": [],
     "recurring": false,
-    "pinned": false
+    "pinned": false,
+    "completedDate": "2025-12-18"
   },
   {
     "id": 1766002015774,
@@ -64,10 +75,11 @@
     "text": "アガルート数学B解答作成",
     "dueDate": "2025-12-20",
     "priority": "medium",
-    "completed": false,
+    "completed": true,
     "subtasks": [],
     "recurring": false,
-    "pinned": false
+    "pinned": false,
+    "completedDate": "2025-12-18"
   },
   {
     "id": 1765994496098,
@@ -257,7 +269,7 @@
   {
     "id": 1765736040318,
     "text": "基本大全BC原稿作成",
-    "dueDate": "2025-12-17",
+    "dueDate": "2025-12-18",
     "priority": "high",
     "completed": false,
     "subtasks": [],
@@ -267,8 +279,8 @@
   {
     "id": 1765735596561,
     "text": "大全アプリ問題データ作成",
-    "dueDate": "2025-12-16",
-    "priority": "high",
+    "dueDate": "2025-12-18",
+    "priority": "medium",
     "completed": false,
     "subtasks": [],
     "recurring": true

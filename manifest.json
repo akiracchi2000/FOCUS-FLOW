@@ -2,6 +2,8 @@
     "name": "FOCUS & FLOW",
     "short_name": "FocusFlow",
     "description": "Your personal task sanctuary for focus and flow.",
+    "id": "./?FOCUS-AND-FLOW-APP",
+    "scope": "./",
     "start_url": "./index.html",
     "display": "standalone",
     "background_color": "#e0c3fc",
