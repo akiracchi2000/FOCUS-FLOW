@@ -112,6 +112,18 @@ async function saveTodos() {
     isSaving = false;
 }
 
+function loadTodos() {
+    const saved = localStorage.getItem('myPremiumTodos');
+    if (saved) {
+        try {
+            todos = JSON.parse(saved);
+            applyCurrentSort();
+        } catch (e) {
+            console.error("Failed to parse todos from local storage", e);
+        }
+    }
+}
+
 // ...
 
 function updateFileStatus(filename, statusOverride = null) {
