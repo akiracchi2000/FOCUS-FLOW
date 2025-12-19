@@ -84,7 +84,12 @@ async function saveTodos() {
     updateFileStatus(currentFileName, 'Saving...');
 
     // 1. Always save to LocalStorage (Backup/Cache)
-    localStorage.setItem('myPremiumTodos', JSON.stringify(todos));
+    try {
+        localStorage.setItem('myPremiumTodos', JSON.stringify(todos));
+    } catch (e) {
+        console.error("Local Storage Save Failed:", e);
+        showToast('Local Storage Save Failed (Quota Exceeded?)', 'error');
+    }
 
     // 2. If fileHandle exists, write to file (Auto-Save)
     if (fileHandle) {
@@ -120,7 +125,11 @@ function loadTodos() {
             applyCurrentSort();
         } catch (e) {
             console.error("Failed to parse todos from local storage", e);
+            showToast('データの読み込みに失敗しました', 'error');
         }
+    } else {
+        // No saved data found
+        console.log("No content in local storage.");
     }
 }
 
@@ -144,7 +153,7 @@ function updateFileStatus(filename, statusOverride = null) {
         fileStatus.style.color = 'var(--accent-color)';
     } else {
         fileStatus.style.display = 'none';
-        currentFilenameSpan.textContent = 'local storage';
+        currentFilenameSpan.textContent = 'ローカルストレージ';
         currentFileName = null;
     }
 }
@@ -334,7 +343,7 @@ async function openFile() {
         try {
             const [handle] = await window.showOpenFilePicker({
                 types: [{
-                    description: 'JSON Files',
+                    description: 'JSONファイル',
                     accept: { 'application/json': ['.json'] }
                 }],
                 multiple: false
@@ -386,12 +395,12 @@ function processLoadedContent(text, filename) {
             saveTodos();
             applyCurrentSort();
             updateFileStatus(filename);
-            showToast(`Loaded ${todos.length} tasks`, 'success');
+            showToast(`${todos.length} 件のタスクを読み込みました`, 'success');
         } else {
-            alert('Invalid file format: Not an array of tasks.');
+            alert('無効なファイル形式です：タスクの配列ではありません。');
         }
     } catch (parseErr) {
-        alert('Error parsing JSON file.');
+        alert('JSONファイルの解析エラー');
         console.error(parseErr);
     }
 }
@@ -401,7 +410,7 @@ async function saveFileAs() {
         try {
             const handle = await window.showSaveFilePicker({
                 types: [{
-                    description: 'JSON Files',
+                    description: 'JSONファイル',
                     accept: { 'application/json': ['.json'] }
                 }],
                 suggestedName: `focus-flow-${new Date().toISOString().split('T')[0]}.json`
