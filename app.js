@@ -932,6 +932,38 @@ function updateDateTriggerState() {
     }
 }
 
+function playCompletionSound() {
+    try {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContext) return;
+
+        const ctx = new AudioContext();
+        const osc = ctx.createOscillator();
+        const gainNode = ctx.createGain();
+
+        osc.connect(gainNode);
+        gainNode.connect(ctx.destination);
+
+        // Simple pleasant "ding"
+        osc.type = 'sine';
+
+        // Start at C6 (1046.50 Hz) and slide up slightly for a "bright" feel
+        osc.frequency.setValueAtTime(1046.5, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(1318.51, ctx.currentTime + 0.1); // E6
+
+        // Envelope
+        gainNode.gain.setValueAtTime(0, ctx.currentTime);
+        gainNode.gain.linearRampToValueAtTime(0.2, ctx.currentTime + 0.05); // Attack
+        gainNode.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.5); // Decay
+
+        osc.start();
+        osc.stop(ctx.currentTime + 0.5);
+    } catch (e) {
+        // Ignore audio errors (e.g. user hasn't interacted yet)
+        console.log('Audio playback failed', e);
+    }
+}
+
 function toggleTodo(id) {
     const todo = todos.find(t => t.id === id);
     if (!todo) return;
@@ -947,9 +979,11 @@ function toggleTodo(id) {
         const dd = String(tomorrow.getDate()).padStart(2, '0');
 
         todo.dueDate = `${yyyy}-${mm}-${dd}`;
+        playCompletionSound();
     } else {
         todo.completed = !todo.completed;
         if (todo.completed) {
+            playCompletionSound();
             const now = new Date();
             const yyyy = now.getFullYear();
             const mm = String(now.getMonth() + 1).padStart(2, '0');
@@ -1206,10 +1240,14 @@ function toggleSubtask(todoId, subtaskId) {
     const todo = todos.find(t => t.id === todoId);
     if (todo && todo.subtasks) {
         // We must update the entire subtasks array for that doc
-        // We must update the entire subtasks array for that doc
-        todo.subtasks = todo.subtasks.map(sub =>
-            sub.id === subtaskId ? { ...sub, completed: !sub.completed } : sub
-        );
+        todo.subtasks = todo.subtasks.map(sub => {
+            if (sub.id === subtaskId) {
+                const newCompleted = !sub.completed;
+                if (newCompleted) playCompletionSound();
+                return { ...sub, completed: newCompleted };
+            }
+            return sub;
+        });
         saveTodos();
         renderTodos();
     }
